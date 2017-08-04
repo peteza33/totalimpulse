@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-flexiblepage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+
+    <h2>{{ page.author }}</h2>
+
+    <p>{{ page.date }}</p>
+
+    {% for block in page.body %}
+        {% if block.block_type == 'heading' %}
+            <h3>{{ block.value }}</h3>
+        {% else %}
+            <section class = "block-{{ block.block_type }}">
+                {% include_block block %}
+            </section>
+        {% endif %}
+    {% endfor %}
+
+    <!-- pictures for specific page -->
+    {% for pic in page.gallery_images.all %}
+        <div style = "float: center; margin: 10px">
+            {% image pic.image fill-320x240 %}
+            <p>{{ pic.caption }}</p>
+        </div>
+    {% endfor %}
+
+    {% if page.tags.all.count %}
+        <div class="tags">
+            <h3>Tags</h3>
+            {% for tag in page.tags.all %}
+                <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <p><a href = "{{ page.get_parent.url }}">Return to blog</a></p>
+
+{% endblock %}
