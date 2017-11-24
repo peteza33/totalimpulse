@@ -10,6 +10,10 @@ from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailsearch import urls as wagtailsearch_urls
 
+from totalimpulse import views
+
+from plots import urls as plot_urls
+
 urlpatterns = [
     url(r'^django-admin/', include(admin.site.urls)),
 
@@ -19,10 +23,11 @@ urlpatterns = [
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's serving mechanism
-    url(r'^blog/', include(wagtail_urls)),
+    url(r'^blog/', include(wagtail_urls), name = 'blog'),
 
     # Optional URL for including your own vanilla Django urls/views
-    # url(r'', include('myapp.urls')),
+    url(r'^$', views.home, name = 'home'),
+    url(r'^plots/', include(plot_urls)),
 ]
 
 if settings.DEBUG:

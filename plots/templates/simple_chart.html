@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css"
+    rel="stylesheet" type="text/css">
+
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
+
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Try a new plot?</h1>
+
+    {{ the_div|safe }}
+
+    {{ the_script|safe }}
+
+{% endblock %}
