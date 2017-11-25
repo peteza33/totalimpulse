@@ -7,6 +7,7 @@
             {% block title %}
                 {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
             {% endblock %}
+            
             {% block title_suffix %}
                 {% with self.get_site.site_name as site_name %}
                     {% if site_name %}- {{ site_name }}{% endif %}
@@ -14,12 +15,9 @@
             {% endblock %}
         </title>
 
-        {% block extra_css %}
-            {# Override this in templates to add extra stylesheets #}
-        {% endblock %}
+        {% block extra_css %} {% endblock %}
 
-        {% block extra_head %}
-        {% endblock %}
+        {% block extra_head %} {% endblock %}
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
@@ -27,8 +25,6 @@
 
         {% block content %} {% endblock %}
 
-        {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
-        {% endblock %}
+        {% block extra_js %} {% endblock %}
     </body>
 </html>

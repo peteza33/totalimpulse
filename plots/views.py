@@ -3,16 +3,24 @@ from django.shortcuts import render
 from bokeh.plotting import figure
 from bokeh.embed import components
 
+import numpy as np
+
 def simple_chart(request):
-	x = [1, 2, 3, 4, 5]
-	y = [6, 7, 2, 4, 5]
+	x = np.linspace(0, 4*np.pi, 100)
+	y = np.sin(x)
 
-	# create a new plot with a title and axis labels
-	p = figure(title="simple line example", x_axis_label='x', y_axis_label='y')
+	plot = figure(title = "simple line example", x_axis_label = 'x', y_axis_label = 'y')
 
-	# add a line renderer with legend and line thickness
-	p.line(x, y, legend="Temp.", line_width=2)
+	plot.circle(x, y, legend = "sin(x)")
+	plot.line(x, y, legend = "sin(x)")
 
-	script, div = components(p)
+	plot.line(x, 2*y, legend = "2*sin(x)", line_dash = [4, 4], line_color = "orange", line_width = 2)
 
-	return render(request, "simple_chart.html", {"the_script": script, "the_div": div})
+	plot.square(x, 3*y, legend = "3*sin(x)", fill_color = None, line_color = "green")
+	plot.line(x, 3*y, legend = "3*sin(x)", line_color = "green")
+
+	plot.toolbar.logo = None
+
+	script, div = components(plot)
+
+	return render(request, "simple_chart.html", {"script": script, 'div': div})
