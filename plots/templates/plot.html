@@ -5,13 +5,13 @@
 	<link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css" type="text/css" />
 	<script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
 
-	{{ script|safe }}
+	{{bokeh_plot_script|safe}}
 
 {% endblock %}
 
 
 {% block content %}
 
-	{{ div|safe }}
+	{{bokeh_plot_div|safe}}
 
 {% endblock %}

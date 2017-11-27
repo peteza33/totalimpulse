@@ -9,10 +9,11 @@ def line(request):
 	if request.method == 'POST':
 		form = plot_form(request.POST)
 		if form.is_valid():
-			x_1 = form.cleaned_data['x_1']
-			x_2 = form.cleaned_data['x_2']
-			y_1 = form.cleaned_data['y_1']
-			y_2 = form.cleaned_data['y_2']
+			data = form.cleaned_data
+			x_1 = data['x_1']
+			x_2 = data['x_2']
+			y_1 = data['y_1']
+			y_2 = data['y_2']
 
 			x = [x_1, x_2]
 			y = [y_1, y_2]
@@ -20,12 +21,13 @@ def line(request):
 			plot = figure(title = 'Line Plot', x_axis_label = 'X', y_axis_label = 'Y')
 
 			plot.line(x, y)
+			plot.circle(x, y)
 
 			plot.toolbar.logo = None
 
 			script, div = components(plot)
 
-			return render(request, "plot.html", {"script": script, 'div': div})
+			return render(request, "plot.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
 	else:
 		form = plot_form()
 
