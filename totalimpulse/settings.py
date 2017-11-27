@@ -176,7 +176,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Fill in your cloud bucket and switch which one of the following 2 lines
 # is commented to serve static content from GCS
-STATIC_URL = 'https://storage.googleapis.com/total-impulse-static/'
+STATIC_URL = 'https://storage.googleapis.com/total_impulse_static/static/'
 # STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
