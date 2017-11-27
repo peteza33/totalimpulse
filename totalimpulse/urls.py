@@ -23,7 +23,7 @@ urlpatterns = [
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's serving mechanism
-    url(r'^blog/', include(wagtail_urls), name = 'blog'),
+    url(r'^blog/', include(wagtail_urls)),
 
     # Optional URL for including your own vanilla Django urls/views
     url(r'^$', views.home, name = 'home'),
