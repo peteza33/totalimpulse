@@ -1,0 +1,11 @@
+# [START runtime]
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT totalimpulse.wsgi
+
+beta_settings:
+    cloud_sql_instances: totalimpulse-187304:us-central1:total-impulse-postgres-database
+
+runtime_config:
+  python_version: 3
+# [END runtime]

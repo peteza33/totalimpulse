@@ -25,7 +25,7 @@ SECRET_KEY = '!=@#r4^!dfy+kcz5@@-hiw#8^q$b%d_6%41fl9oot!*@3c()3n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -96,16 +96,35 @@ WSGI_APPLICATION = 'totalimpulse.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'total_impulse_2',
+#         'USER': 'postgres',
+#         'PASSWORD': '123',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'total_impulse_2',
-        'USER': 'postgres',
+        'NAME': 'totalimpulse',
+        'USER': 'impulse_user',
         'PASSWORD': '123',
-        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
+# In the flexible environment, you connect to CloudSQL using a unix socket.
+# Locally, you can use the CloudSQL proxy to proxy a localhost connection
+# to the instance
+DATABASES['default']['HOST'] = '/cloudsql/totalimpulse-187304:us-central1:total-impulse-postgres-database'
+if os.getenv('GAE_INSTANCE'):
+    pass
+else:
+    DATABASES['default']['HOST'] = '127.0.0.1'
+# [END dbconfig]
 
 
 # Password validation
@@ -154,7 +173,11 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+
+# Fill in your cloud bucket and switch which one of the following 2 lines
+# is commented to serve static content from GCS
+STATIC_URL = 'https://storage.googleapis.com/total-impulse-static/'
+# STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
