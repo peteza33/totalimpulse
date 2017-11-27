@@ -1,6 +1,7 @@
 venv
 *.pyc
 db.sqlite3
+static/
 *.env
 
 # Byte-compiled / optimized / DLL files
