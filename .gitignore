@@ -3,6 +3,7 @@ venv
 db.sqlite3
 static/
 *.env
+totalimpulse/settings/local.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
