@@ -14,18 +14,14 @@ from totalimpulse import views
 from plots import urls as plot_urls
 
 urlpatterns = [
-    url(r'^django-admin/', include(admin.site.urls)),
+    url(r'^$', views.home, name = 'home'),
 
-    url(r'^admin/', include(wagtailadmin_urls)),
+    url(r'^django-secret-admin/', include(admin.site.urls)),
+    url(r'^blog-secret-admin/', include(wagtailadmin_urls)),
     url(r'^search/', include(wagtailsearch_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
-    # For anything not caught by a more specific rule above, hand over to
-    # Wagtail's serving mechanism
     url(r'^blog/', include(wagtail_urls)),
-
-    # Optional URL for including your own vanilla Django urls/views
-    url(r'^$', views.home, name = 'home'),
     url(r'^plots/', include(plot_urls)),
 ]
 

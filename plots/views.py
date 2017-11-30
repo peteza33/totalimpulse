@@ -3,11 +3,14 @@ from django.shortcuts import render
 from bokeh.plotting import figure
 from bokeh.embed import components
 
-from .forms import plot_form
+from .forms import plot_line_form
 
-def line(request):
+def plots_home(request):
+	return render(request, 'plot_home.html', {})
+
+def plots_line(request):
 	if request.method == 'POST':
-		form = plot_form(request.POST)
+		form = plot_line_form(request.POST)
 		if form.is_valid():
 			data = form.cleaned_data
 			x_1 = data['x_1']
@@ -29,7 +32,7 @@ def line(request):
 
 			return render(request, "plot.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
 	else:
-		form = plot_form()
+		form = plot_line_form()
 
 	return render(request, "plot_data_form.html", {'form': form})
 

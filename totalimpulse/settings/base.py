@@ -63,9 +63,14 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.csrf',
+                'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -74,33 +79,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'totalimpulse.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'total_impulse_2',
-#         'USER': 'postgres',
-#         'PASSWORD': '123',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'totalimpulse',
-        'USER': 'impulse_user',
-        'PASSWORD': DB_PASSWORD,
-        'PORT': '5432',
-    }
-}
-
-DATABASES['default']['HOST'] = '/cloudsql/' + DB_CONNECTION_NAME
 if os.getenv('GAE_INSTANCE'):
-    pass
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'totalimpulse',
+            'USER': 'impulse_user',
+            'PASSWORD': DB_PASSWORD,
+            'HOST': '/cloudsql/' + DB_CONNECTION_NAME,
+            'PORT': '5432',
+        }
+    }
 else:
-    DATABASES['default']['HOST'] = '127.0.0.1'
-
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'total_impulse_2',
+            'USER': 'postgres',
+            'PASSWORD': '123',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -142,22 +142,19 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_URL = 'https://storage.googleapis.com/' + GS_BUCKET_PREFIX + '_static/'
-
 # Media (user uploaded content like images, docs, etc)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-MEDIA_URL = '/media/'
+if os.getenv('GAE_INSTANCE'):
+    STATIC_URL = 'https://storage.googleapis.com/' + GS_BUCKET_PREFIX + '_static/'
+    DEFAULT_FILE_STORAGE = 'totalimpulse.gcs.GCSMediaStorage'
+    MEDIA_URL = '/media/'
+else:
+    STATIC_URL = '/static/'
+    MEDIA_URL = '/media/'
+    
 
-DEFAULT_FILE_STORAGE = 'totalimpulse.gcs.GCSMediaStorage'
-
-# if DEBUG == True:
-#     STATIC_URL = '/static/'
-#     MEDIA_URL = '/media/'
-# elif DEBUG == False:
-#     STATIC_URL = 'https://storage.googleapis.com/total_impulse_static/static/'
-#     MEDIA_URL = 'https://storage.googleapis.com/total_impulse_static/media/'
-
+# Security if running in production on GAE
 if os.getenv('GAE_INSTANCE'):
     SESSION_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 2592000
