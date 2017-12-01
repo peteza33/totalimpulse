@@ -13,3 +13,6 @@ class sc_life_form(forms.Form):
 	area = forms.FloatField(min_value = 0.0)
 	Cd = forms.FloatField(min_value = 0.0)
 	total_impulse = forms.FloatField(min_value = 0.0)
+
+class delta_v_form(forms.Form):
+	initial_altitude = forms.FloatField(min_value = 0.0)

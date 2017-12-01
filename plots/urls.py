@@ -7,5 +7,7 @@ urlpatterns = [
 
     url(r'^line/', views.plots_line, name = 'plots_line'),
 
-    url(r'^sc-life-with-drag/', views.sc_life_plot, name = 'plots_sc_drag')
+    url(r'^sc-life-with-drag/', views.sc_life_plot, name = 'plots_sc_drag'),
+
+    url(r'^delta-V/', views.delta_v, name = 'plots_delta_v'),
 ]
