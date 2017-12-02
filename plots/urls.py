@@ -9,5 +9,5 @@ urlpatterns = [
 
     url(r'^sc-life-with-drag/', views.sc_life_plot, name = 'plots_sc_drag'),
 
-    url(r'^delta-V/', views.delta_v, name = 'plots_delta_v'),
+    url(r'^DV-drop-SSO/', views.delta_v, name = 'plots_delta_v'),
 ]
