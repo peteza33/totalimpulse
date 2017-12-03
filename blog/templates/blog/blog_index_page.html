@@ -11,12 +11,12 @@
     <!-- 'intro' is defined in BlogIndexPage  -->
     <div class = "intro">{{ page.intro|richtext }}</div>
 
-    <!-- list of child pages to BlogIndexPage -->
-    <!-- 'blogpages' context is defined in BlogIndexPage -->
+    <!-- list of child pages to BlogIndexPage, here the 'content' context is defined in BlogIndexPage model -->
     {% for post in content %}    
         {% with post=post.specific %}
             <h2><a href = "{% pageurl post %}">{{ post.title }}</a></h2>
 
+            <!-- insert thumbnail image -->
             {% with post.main_image as main_image %}
                 {% if main_image %}
                     {% image main_image fill-160x100 %}

@@ -72,6 +72,7 @@ class BlogPage(Page):
 		FieldPanel('author'),
 		FieldPanel('intro'),
 		StreamFieldPanel('body'),
+		InlinePanel('gallery_images', label = 'Gallery images')
 	]
 
 class BlogPageGalleryImage(Orderable):

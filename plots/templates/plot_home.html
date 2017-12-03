@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Plots!</h1>
+<h1>Plots and Calculators</h1>
 
-<h2><a href = "{% url 'plots_line' %}">line plot</a></h2>
+<h2><a href = "{% url 'plots_line' %}">Simple Line Plot</a></h2>
 
-<h2><a href = "{% url 'plots_sc_drag' %}">spacecraft drag</a></h2>
+<h2><a href = "{% url 'plots_sc_drag' %}">Spacecraft Drag and Orbital Life</a></h2>
 
-<h2><a href = "{% url 'plots_delta_v' %}">Delta-V to Maintain SSO</a></h2>
+<h2><a href = "{% url 'plots_delta_v' %}">Spacecraft Delta-V to Maintain SSO</a></h2>
 
-<h2><a href = "{% url 'home' %}">home</a></h2>
+<h3><a href = "{% url 'home' %}">Home</a></h3>
 
 {% endblock %}
