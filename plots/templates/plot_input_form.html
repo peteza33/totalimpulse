@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<!-- How to add latex equations? -->
+	{% if plot_type == "Line" %}
+		<h1>Simple Line Plot</h1>
+		<p> A line of form y = mx + b</p>
+
+	{% elif plot_type == "sc_drag_life" %}
+		<h1>Spacecraft Life vs Atmospheric Drag</h1>
+		<p>TBD add discussion of how this plot works...</p>
+
+	{% elif plot_type == "delta_V" %}
+		<h1>Delta-V Required to Drop Altitude</h1>
+		<p>TBD add discussion of how this plot works....</p>
+	{% endif %}
+
+	<form action="" method="post">
+	    {% csrf_token %}
+	    {{ form }}
+	    <input type="submit" value="Submit" />
+	</form>
+
+{% endblock %}

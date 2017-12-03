@@ -32,11 +32,12 @@ def plots_line(request):
 
 			script, div = components(plot)
 
-			return render(request, "plot.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
+			return render(request, "plot_show.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
 	else:
 		form = plot_line_form()
+		plot_type = 'Line'
 
-	return render(request, "plot_data_form.html", {'form': form})
+	return render(request, "plot_input_form.html", {'form': form, 'plot_type': plot_type})
 
 
 def sc_life_plot(request):
@@ -150,12 +151,13 @@ def sc_life_plot(request):
 			# Embed plot elements
 			script, div = components(plot)
 
-			return render(request, "plot.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
+			return render(request, "plot_show.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
 
 	else:
 		form = sc_life_form()
+		plot_type = 'sc_drag_life'
 
-	return render(request, "plot_data_form.html", {'form': form})
+	return render(request, "plot_input_form.html", {'form': form, 'plot_type': plot_type})
 
 
 def delta_v(request):
@@ -293,9 +295,10 @@ def delta_v(request):
 			# Embed plot elements
 			script, div = components(plot)
 
-			return render(request, "plot.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
+			return render(request, "plot_show.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
 
 	else:
 		form = delta_v_form()
+		plot_type = 'delta_V'
 
-	return render(request, "plot_data_form.html", {'form': form})
+	return render(request, "plot_input_form.html", {'form': form, 'plot_type': plot_type})
