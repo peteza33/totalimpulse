@@ -9,6 +9,7 @@ from .forms import plot_line_form, sc_life_form, delta_v_form
 def plots_home(request):
 	return render(request, 'plot_home.html', {})
 
+
 def plots_line(request):
 	if request.method == 'POST':
 		form = plot_line_form(request.POST)
@@ -90,7 +91,7 @@ def sc_life_plot(request):
 			alt_initial = data['initial_altitdue']
 
 			# final mission operational altitude
-			alt_final_range = np.arange(200., 510., 10)
+			alt_final_range = np.arange(150., 510., 10)
 
 			# pass numpy arrays into python functions
 			DV_function = np.vectorize(combined_alt_plane_change_SSO)
@@ -101,7 +102,6 @@ def sc_life_plot(request):
 			"""
 			Find life (time able to compensate for drag force) for each spacecraft design
 			"""
-
 			m = data['mass'] # kg
 			area = data['area'] # m2
 			Cd = data['Cd']
@@ -116,10 +116,24 @@ def sc_life_plot(request):
 			"""
 			# Assumes atmosphere model from https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php
 			# Total density taken for April 1, 2017 at 14:00 UTC
-			rho = np.array([2.322E-13, 1.657E-13, 1.204E-13, 8.892E-14, 6.659E-14, 5.047E-14, 3.867E-14, 2.991E-14, 2.333E-14,
-							1.834E-14, 1.452E-14, 1.156E-14, 9.256E-15, 7.448E-15, 6.021E-15, 4.886E-15, 3.980E-15, 3.252E-15,
-							2.665E-15, 2.190E-15, 1.805E-15, 1.490E-15, 1.233E-15, 1.022E-15, 8.492E-16, 7.066E-16, 5.890E-16,
-							4.918E-16, 4.113E-16, 3.445E-16, 2.890E-16]) * 1e2 **3 / 1e3
+			# rho = np.array([2.322E-13, 1.657E-13, 1.204E-13, 8.892E-14, 6.659E-14, 5.047E-14, 3.867E-14, 2.991E-14, 2.333E-14,
+			# 				1.834E-14, 1.452E-14, 1.156E-14, 9.256E-15, 7.448E-15, 6.021E-15, 4.886E-15, 3.980E-15, 3.252E-15,
+			# 				2.665E-15, 2.190E-15, 1.805E-15, 1.490E-15, 1.233E-15, 1.022E-15, 8.492E-16, 7.066E-16, 5.890E-16,
+			# 				4.918E-16, 4.113E-16, 3.445E-16, 2.890E-16]) * 1e2 **3 / 1e3
+
+			# From Orbion atmospher tool for 0.4 solar cycle (range is for alts = np.arange(150, 510, 10))
+			rho = np.array([1.57503761e-09,   8.71650114e-10,   5.10685020e-10,
+			         3.11980283e-10,   1.96870776e-10,   1.27554367e-10,
+			         8.45030934e-11,   5.70666788e-11,   3.91884398e-11,
+			         2.73077516e-11,   1.92733000e-11,   1.37541417e-11,
+			         9.91009690e-12,   7.19947796e-12,   5.26742035e-12,
+			         3.87732881e-12,   2.86913243e-12,   2.13279450e-12,
+			         1.59179919e-12,   1.19229314e-12,   8.95975607e-13,
+			         6.75359621e-13,   5.10561785e-13,   3.87100189e-13,
+			         2.94364743e-13,   2.24542614e-13,   1.71855723e-13,
+			         1.32014841e-13,   1.01825680e-13,   7.89027203e-14,
+			         6.14600820e-14,   4.81574247e-14,   3.79887363e-14,
+			         3.01948922e-14,   2.42039447e-14,   1.95838940e-14])
 
 			# drag force
 			F = 0.5 * rho * area * Cd * circular_velocity(alt_final_range) ** 2 # N

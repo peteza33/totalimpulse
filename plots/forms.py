@@ -8,11 +8,11 @@ class plot_line_form(forms.Form):
 
 
 class sc_life_form(forms.Form):
-	initial_altitdue = forms.FloatField(min_value = 200., max_value = 600., label = 'Initial Altitude (km)', initial = '500')
-	mass = forms.FloatField(min_value = 0.0, label = 'Mass (kg)', initial = '100')
-	area = forms.FloatField(min_value = 0.0, label = 'Wetted Area (m2)', initial = '0.5')
-	Cd = forms.FloatField(min_value = 0.0, label = 'Coefficient of Drag (Cd)', initial = '2.0')
-	total_impulse = forms.FloatField(min_value = 0.0, label = 'Total Impulse of System (N-s)', initial = '100000')
+	initial_altitdue = forms.FloatField(min_value = 150., max_value = 500., label = 'Initial Altitude (km)', initial = '500')
+	mass = forms.FloatField(min_value = 0.0, label = 'Mass (kg)', initial = '110')
+	area = forms.FloatField(min_value = 0.0, label = 'Wetted Area (m2)', initial = '0.57')
+	Cd = forms.FloatField(min_value = 0.0, label = 'Coefficient of Drag (Cd)', initial = '2.2')
+	total_impulse = forms.FloatField(min_value = 0.0, label = 'Total Impulse of System (N-s)', initial = '21000')
 
 class delta_v_form(forms.Form):
 	initial_altitude = forms.FloatField(min_value = 0.0, label = 'Initial Altitude (km)', initial = '500')
