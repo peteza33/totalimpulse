@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+
+	{% if bokeh_plot_script %}
+		<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css" type="text/css" />
+		<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
+		{{bokeh_plot_script|safe}}
+	{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+	<h1>Spacecraft Life vs Atmospheric Drag</h1>
+	<p>TBD add discussion of how this plot works...</p>
+
+	{% if bokeh_plot_div %}
+		{{bokeh_plot_div|safe}}
+	{% else %}
+		<form action="" method="post">
+		    {% csrf_token %}
+		    {{ form }}
+	    	<input type="submit" value="Submit" />
+		</form>
+	{% endif %}
+
+	<h2><a href = "{% url 'plots_home' %}">back to plots</a></h2>
+
+{% endblock %}
