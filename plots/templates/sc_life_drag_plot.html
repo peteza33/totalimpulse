@@ -2,6 +2,16 @@
 
 {% block extra_head %}
 
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "all" } }
+	});
+	</script>
+
+	<script type="text/javascript" async
+	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+	</script>
+
 	{% if bokeh_plot_script %}
 		<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css" type="text/css" />
 		<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
@@ -13,15 +23,38 @@
 
 {% block content %}
 
-	<h1>Spacecraft Life vs Atmospheric Drag</h1>
-	<p>TBD add discussion of how this plot works...</p>
+	<h1>Spacecraft Drag Compensation</h1>
+	<p>
+		This calculator determines how long a spacecraft design can maintain altitude against the atmospheric drag force at a given altitude until the propellant is exhausted. For our purposes this is defined as 'lifetime', but does not take into account the orbital decay after propellant is spent. Also it does not take into account other uses of propellant a spacecraft may require throughout it's operational life (ie, phasing, stationkeeping, COLA, etc), it is only drag makeup to maintain altitude.
+	</p>
+
+	<p>
+		The major assumptions are:
+		<ul>
+			<li>The maneuver(s) required to drop the separation altitude to the mission altitude use the maximum efficiency combined plane change technique (discussed in textbooks and <a href="http://www.braeunig.us/space/orbmech.htm#maneuver">here</a>, maintain sun synchronous orbit, and the orbit is circular</li>
+			<li>The <a href="https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php">NRLMSISE-00</a> atmospheric model is used, taking into account maximum solar cycle F10.7 and ap indices (further information here), but the atmosphere's properties do not evolve with time as the calculation is run (ie frozen conditions). For high total impulse missions (ie long), this static atmosphere will introduce error</li>
+			<li>The frozen atmospheric conditions are at worst case solar cycle (40% of the 11 year cycle)
+			<li>Does not account for other delta-V or propellant uses like momentum dumping, separation clean-up, phasing, stationkeeping, etc</li>
+			<li>The mission altitude is between 150 and 500 km</li>
+		</ul>
+	</p>
+
+	<p>
+		This calculator follows these major steps:
+		<ol>
+			<li>Delta-V to drop a circular orbit's altitude while maintaining sun synchronicity is calculated as $$dV = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}}$$ where $$v = \sqrt{ \frac{\mu}{r_{earth} + alt}}$$</li>
+			<li>The atmospheric model incorporating solar cycle based F10.7 and ap indices calculates the atmosphere's density for the given altitude. The density is used to determine drag force experienced by the spacecraft as $$F_{d} = \frac{1}{2} \rho A_{wet} C_{d} v^2$$</li>
+			<li>Total delta-V capability onboard is expressed as \(dV_{total} = \frac{I_{T}}{m}\). Lifetime at a given altitude can be thought of as the velocity change capability remaining divided by the deceleration due to drag and is then calculated as $$L = \frac{ dV_{total} - dV_{alt drop} }{\dfrac{F_{d}}{m}}$$</li>
+			<li>Both drag force and time until propellant depletion is plotted</li>
+		</ol>
+	</p>
 
 	{% if bokeh_plot_div %}
 		{{bokeh_plot_div|safe}}
 	{% else %}
 		<form action="" method="post">
 		    {% csrf_token %}
-		    {{ form }}
+		    {{ form.as_p }}
 	    	<input type="submit" value="Submit" />
 		</form>
 	{% endif %}

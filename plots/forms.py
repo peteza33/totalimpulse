@@ -15,4 +15,4 @@ class sc_life_form(forms.Form):
 	total_impulse = forms.FloatField(min_value = 0.0, label = 'Total Impulse of System (N-s)', initial = '21000')
 
 class delta_v_form(forms.Form):
-	initial_altitude = forms.FloatField(min_value = 0.0, label = 'Initial Altitude (km)', initial = '500')
+	initial_altitude = forms.FloatField(min_value = 160., label = 'Initial Altitude (km)', initial = '500')
