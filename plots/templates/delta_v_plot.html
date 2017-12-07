@@ -2,6 +2,12 @@
 
 {% block extra_head %}
 
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "all" } }
+	});
+	</script>
+
 	<script type="text/javascript" async
 	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
 	</script>
@@ -18,17 +24,34 @@
 {% block content %}
 
 	<h1>Delta-V Required to Drop Altitude</h1>
+
 	<p>
-	  When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
-	  $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+		This calculator compares the delta-V required to drop a spacecraft's orbital altitude while maintaining sun synchronicity. The major assumptions are
+
+		<ul>
+			<li>Circular orbit</li>
+			<li>First method is the summation of a Hohmann transfer plus a simple plane change</li>
+			<li>Second method is to combine the plane change with the tangential burn at apogee of the transfer orbit, which is more efficient</li>
+		</ul>
 	</p>
 
+	<p>
+		The calculator follows these major steps:
+
+		<ol>
+			<li>The velocity of a circular orbit is defined as $$v = \sqrt{ \frac{\mu}{r_{earth} + alt}}$$ and a Hohmann transfer, the most fuel-efficient transfer between two circular coplanar orbits, is defined as $$dV_{Hohmann} = \bigg[ \sqrt{ \mu \Big( \dfrac{2}{r_{i}} - \dfrac{1}{a_{transfer}} \Big)} - v_{i} \bigg] + \bigg[ v_{f} - \sqrt{ \mu \Big( \dfrac{2}{r_{f}} - \dfrac{1}{a_{transfer}} \Big)} \bigg] $$</li>
+			<li>The velocity change for a plane change is defined as $$dV_{incl} = 2 v_{i} \sin \theta $$</li>
+			<li>The total 2-step process is then \(dV_{total} = dV_{Hohmann} + dV_{incl}\)</li>
+			<li>The combined altitude drop and plane change velocity change is $$dV_{combined} = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}}$$</li>
+		</ol>
+	</p>
+	
 	{% if bokeh_plot_div %}
 		{{bokeh_plot_div|safe}}
 	{% else %}
 		<form action="" method="post">
 		    {% csrf_token %}
-		    {{ form }}
+		    {{ form.as_p }}
 	    	<input type="submit" value="Submit" />
 		</form>
 	{% endif %}

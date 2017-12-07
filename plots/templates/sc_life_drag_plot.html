@@ -42,7 +42,7 @@
 	<p>
 		This calculator follows these major steps:
 		<ol>
-			<li>Delta-V to drop a circular orbit's altitude while maintaining sun synchronicity is calculated as $$dV = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}}$$ where $$v = \sqrt{ \frac{\mu}{r_{earth} + alt}}$$</li>
+			<li>Delta-V to drop a circular orbit's altitude while maintaining sun synchronicity is calculated as (further info <a href="{% url 'plots_delta_v' %}">here</a>) $$dV = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}}$$ where $$v = \sqrt{ \frac{\mu}{r_{earth} + alt}}$$</li>
 			<li>The atmospheric model incorporating solar cycle based F10.7 and ap indices calculates the atmosphere's density for the given altitude. The density is used to determine drag force experienced by the spacecraft as $$F_{d} = \frac{1}{2} \rho A_{wet} C_{d} v^2$$</li>
 			<li>Total delta-V capability onboard is expressed as \(dV_{total} = \frac{I_{T}}{m}\). Lifetime at a given altitude can be thought of as the velocity change capability remaining divided by the deceleration due to drag and is then calculated as $$L = \frac{ dV_{total} - dV_{alt drop} }{\dfrac{F_{d}}{m}}$$</li>
 			<li>Both drag force and time until propellant depletion is plotted</li>
