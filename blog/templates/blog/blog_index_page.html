@@ -1,33 +1,58 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% load wagtailcore_tags wagtailimages_tags %}
 
-{% block content %}
-    <!-- 'page' is from BlogIndexPage model (title is from the base Page model) -->
-    <h1>{{ page.title }}</h1>
+{% block blogtitle %}
+    <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/bg14.jpg" %}"'')>
+        <div class="container">
+            <div class="row">
+                <div class=" col-md-8 ml-auto mr-auto">
+                    <h1 class='text-uppercase'>Propulsion Related Topics Blog</h1> <!-- 'page' is from BlogIndexPage model (title is from the base Page model) -->
+                </div>
+            </div>
+        </div>
+    </div><!--page title end-->
+{% endblock %}
 
-    <!-- 'intro' is defined in BlogIndexPage  -->
-    <div class = "intro">{{ page.intro|richtext }}</div>
+{% block blogindex %}
+    <div class="container mb30">
+        <div class="row">
+            <div class="col-md-10 ml-auto mr-auto">
 
-    <!-- list of child pages to BlogIndexPage, here the 'content' context is defined in BlogIndexPage model -->
-    {% for post in content %}
-        <!-- skip 'Tags' in the index -->
-        {% if post.title != "Tags" %}
-            {% with post=post.specific %}
-                <h2><a href = "{% pageurl post %}">{{ post.title }}</a></h2>
+                {% for post in content %}
+                    {% if post.title != "Tags" %}
+                        {% with post=post.specific %}
+                            <article class="article-post mb70">
+                                
+                                <!-- gallery image thumbnail -->
+                                {% with post.main_image as main_image %}
+                                    {% if main_image %}
+                                        <a class="post-thumb mb30" href="{% pageurl post %}">
+                                            {% image main_image fill-1140x500 %}
+                                        </a>
+                                    {% endif %}
+                                {% endwith %}
+                                <div class="post-content text-center">
+                                    <a href="{% pageurl post %}"><h2 class="post-title">{{ post.title }}</h2></a>
 
-                <!-- insert thumbnail image -->
-                {% with post.main_image as main_image %}
-                    {% if main_image %}
-                        {% image main_image fill-160x100 %}
+                                    <ul class="post-meta list-inline">
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-user-circle-o"></i> <a href="#">{{ post.author }}</a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-calendar-o"></i> <a href="#">{{ post.date }}</a>
+                                        </li>
+                                    </ul>
+                                    <p> {{ post.intro }}</p>
+                                    <a href="{% pageurl post %}" class="btn btn-outline-secondary">More</a>
+                                </div>
+                            </article><!--article-->
+                        {% endwith %}
                     {% endif %}
-                {% endwith %}
-                
-                <p>{{ post.intro }}</p>
-            {% endwith %}
-        {% endif %}
-    {% endfor %}
-
-    <h2><a href = "{% url 'home' %}">Home</a></h2>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

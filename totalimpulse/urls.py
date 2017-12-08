@@ -14,8 +14,6 @@ from totalimpulse import views
 from plots import urls as plot_urls
 
 urlpatterns = [
-    url(r'^$', views.home, name = 'home'),
-
     url(r'^django-secret-admin/', include(admin.site.urls)),
     url(r'^blog-secret-admin/', include(wagtailadmin_urls)),
     url(r'^search/', include(wagtailsearch_urls)),
@@ -23,6 +21,8 @@ urlpatterns = [
 
     url(r'^blog/', include(wagtail_urls)),
     url(r'^plots/', include(plot_urls)),
+
+    url(r'^$', views.home, name = 'home'),
 ]
 
 if settings.DEBUG:
