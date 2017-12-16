@@ -16,55 +16,61 @@
 {% endblock %}
 
 {% block blogpost %}
-    <div class="container pb50">
-        <div class="row">
-            <div class="col-md-9 mb40">
-                <article>
-                    <!-- gallery image at the top of post (no streamfield images at top) -->
-                    {% with post.main_image as main_image %}
-                        {% if main_image %}
-                            {% image main_image fill-1140x500 %}
-                        {% endif %}
-                    {% endwith %}
-                    
-                    <div class="post-content">
-                        <h3>{{ page.intro }}</h3>
-                            <ul class="post-meta list-inline">
-                                <li class="list-inline-item">
-                                    <i class="fa fa-user-circle-o"></i>{{ page.author }}</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="fa fa-calendar-o"></i>{{ page.date }}</a>
-                                </li>
-                            </ul>
-                        
-                        <!-- steamfield blocks (including streamfield images) -->
-                        {% for block in page.body %}
-                            {% if block.block_type == 'heading' %}
-                                <p class="lead">{{ block.value }}</p>
-                            {% elif block.block_type == 'image' %}
-                                {% image block.value width-1000 %}
-                            {% else %}
-                                {% include_block block %}
-                            {% endif %}
-                        {% endfor %}
+    <div class="page-footer-sticky">
+        <div class="footer-sticky-wrap">
+            <div class="footer-sticky-inner">
+                <div class="container pb50">
+                    <div class="row">
+                        <div class="col-md-9 mb40">
+                            <article>
+                                <!-- gallery image at the top of post (no streamfield images at top) -->
+                                {% with post.main_image as main_image %}
+                                    {% if main_image %}
+                                        {% image main_image fill-1140x500 %}
+                                    {% endif %}
+                                {% endwith %}
+                                
+                                <div class="post-content">
+                                    <h3>{{ page.intro }}</h3>
+                                        <ul class="post-meta list-inline">
+                                            <li class="list-inline-item">
+                                                <i class="fa fa-user-circle-o"></i>{{ page.author }}</a>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <i class="fa fa-calendar-o"></i>{{ page.date }}</a>
+                                            </li>
+                                        </ul>
+                                    
+                                    <!-- steamfield blocks (including streamfield images) -->
+                                    {% for block in page.body %}
+                                        {% if block.block_type == 'heading' %}
+                                            <p class="lead">{{ block.value }}</p>
+                                        {% elif block.block_type == 'image' %}
+                                            {% image block.value width-1000 %}
+                                        {% else %}
+                                            {% include_block block %}
+                                        {% endif %}
+                                    {% endfor %}
 
-                        <!-- images added as gallery images in a post (not streamfield images, those are above) -->
-                        {% for pic in page.gallery_images.all %}
-                            {% image pic.image fill-1140x500 %}
-                            <p>{{ pic.caption }}</p>
-                        {% endfor %}
+                                    <!-- images added as gallery images in a post (not streamfield images, those are above) -->
+                                    {% for pic in page.gallery_images.all %}
+                                        {% image pic.image fill-1140x500 %}
+                                        <p>{{ pic.caption }}</p>
+                                    {% endfor %}
 
-                        {% if page.tags.all.count %}
-                            <div class="tags">
-                                <h3>Tags</h3>
-                                {% for tag in page.tags.all %}
-                                    <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                                    {% if page.tags.all.count %}
+                                        <div class="tags">
+                                            <h3>Tags</h3>
+                                            {% for tag in page.tags.all %}
+                                                <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </article>
+                        </div>
                     </div>
-                </article><!-- post article-->
+                </div>
             </div>
         </div>
     </div>

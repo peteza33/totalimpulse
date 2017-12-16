@@ -2,7 +2,7 @@
 {% load static wagtailuserbar %}
 {% load staticfiles %}
 
-<html lang="en">
+<html lang="en" class="footer-sticky">
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -53,7 +53,7 @@
         {% block extra_head %} {% endblock %}
     </head>
 
-    <body>
+    <body class="sticky-footer-page">
         {% wagtailuserbar %}
 
         <div id="preloader">
@@ -85,8 +85,8 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Calculators</a>
                              <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="{% url 'plots_delta_v' %}" class="dropdown-item">Delta-V</a></li>
-                                <li><a href="{% url 'plots_sc_drag' %}" class="dropdown-item">Drag</a></li>
+                                <li><a href="{% url 'plots_delta_v' %}" class="dropdown-item">Delta-V for Alt Drop</a></li>
+                                <li><a href="{% url 'plots_sc_drag' %}" class="dropdown-item">Spacecraft Drag</a></li>
                             </ul>
                         </li>
                     </ul>        
@@ -95,9 +95,9 @@
         </nav>
         <!-- end Navbar -->
 
-        {% block revslider %} {% endblock %}
+        {% block revslider %} {% endblock %} <!-- used in Home -->
 
-        {% block blogtitle %} {% endblock %}
+        {% block blogtitle %} {% endblock %} 
 
         {% block blogindex %} {% endblock %}
 
