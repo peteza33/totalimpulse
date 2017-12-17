@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+
 {% load wagtailcore_tags wagtailimages_tags %}
+
 
 {% block pagetitle %}
     <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/background.jpg" %}"'')>
         <div class="container">
             <div class="row">
                 <div class=" col-md-8 ml-auto mr-auto">
-                    <h1 class='text-uppercase'>Propulsion Blog</h1> <!-- 'page' is from BlogIndexPage model (title is from the base Page model) -->
+                    <h1>Propulsion Blog</h1> <!-- 'page' is from BlogIndexPage model (title is from the base Page model) -->
                 </div>
             </div>
         </div>
     </div><!--page title end-->
 {% endblock %}
+
 
 {% block blogindex %}
     <div class="container mb30">

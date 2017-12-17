@@ -1,27 +1,30 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+
 {% load wagtailcore_tags wagtailimages_tags %}
+
 
 {% block pagetitle %}
     <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/background.jpg" %}"'')>
         <div class="container">
             <div class="row">
                 <div class=" col-md-8 ml-auto mr-auto">
-                    <h1 class='text-uppercase'>{{ page.title }}</h1> <!-- 'page' is from BlogIndexPage model (title is from the base Page model) -->
+                    <h1>{{ page.title }}</h1> <!-- 'page' is from BlogIndexPage model (title is from the base Page model) -->
                 </div>
             </div>
         </div>
     </div><!--page title end-->
 {% endblock %}
 
+
 {% block blogpost %}
     <div class="page-footer-sticky">
         <div class="footer-sticky-wrap">
             <div class="footer-sticky-inner">
-                <div class="container pb50">
+                <div class="container mb70">
                     <div class="row">
-                        <div class="col-md-9 mb40">
+                        <div class="col-md-12 mb40">
                             <article>
                                 <!-- gallery image at the top of post (no streamfield images at top) -->
                                 {% with post.main_image as main_image %}
@@ -59,10 +62,11 @@
                                     {% endfor %}
 
                                     {% if page.tags.all.count %}
-                                        <div class="tags">
-                                            <h3>Tags</h3>
+                                        <div class="tags" align="center">
+                                            <h3>Topic Tags</h3>
                                             {% for tag in page.tags.all %}
-                                                <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
+                                                <!-- <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a> -->
+                                                <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button" class="btn btn-info mb5 btn-rounded">{{ tag }}</button></a>
                                             {% endfor %}
                                         </div>
                                     {% endif %}

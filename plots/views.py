@@ -160,7 +160,7 @@ def sc_life_plot(request):
 			life = remaining_DV / (F / m) * 3.17098e-8 # years
 
 			# Create plot
-			plot = figure()
+			plot = figure(plot_width = 1000, plot_height = 800)
 
 			# Add data
 			plot.circle(alt_final_range, life, color = 'blue')
@@ -304,7 +304,7 @@ def delta_v(request):
 			combined_alt_plane_change_SSO_DV = combined_alt_plane_change_SSO_np_func(alt_initial, alt_final_range)
 
 			# Create plot
-			plot = figure()
+			plot = figure(plot_width = 1000, plot_height = 800)
 
 			# Add data
 			plot.line(alt_final_range, hohmann_transfer_DV, legend = 'Hohmann Transfer', color = 'blue')

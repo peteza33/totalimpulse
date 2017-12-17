@@ -26,20 +26,20 @@
             {% if self.seo_title %}
                 {% with self.get_site.site_name as site_name %}
                     {% if site_name %}
-                        <title> {{ site_name }} - {{ self.seo_title }} </title>
+                        <title> {{ site_name }}: {{ self.seo_title }} </title>
                     {% endif %}
                 {% endwith %}
             {% else %}
                 {% with self.get_site.site_name as site_name %}
                     {% if site_name %}
-                        <title> {{ site_name }} - {{ self.title }} </title>
+                        <title> {{ site_name }}: {{ self.title }} </title>
                     {% endif %}
                 {% endwith %}
             {% endif %}
         {% endblock %}
                
         <!-- Plugins CSS -->
-        <link href="{% static 'css/plugins/plugins.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/plugins/plugins.css' %}">
         <!-- REVOLUTION STYLE SHEETS -->
         <link rel="stylesheet" type="text/css" href="{% static 'revolution/css/settings.css' %}">
         <!-- REVOLUTION LAYERS STYLES -->
@@ -66,7 +66,6 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light navbar-transparent bg-faded">
             <div class="container">
-
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -76,16 +75,16 @@
                 <div  id="navbarNavDropdown" class="navbar-collapse collapse">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#/">Blog</a>
+                            <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#/"><font color="white">Blog</a></font>
                              <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="/blog/" class="dropdown-item">Posts</a></li>
+                                <li><a href="/blog/" class="dropdown-item"><font color="white">Posts</a></font></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Calculators</a>
+                            <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><font color="white">Calculators</a></font>
                              <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="{% url 'plots_delta_v' %}" class="dropdown-item">Delta-V for Alt Drop</a></li>
-                                <li><a href="{% url 'plots_sc_drag' %}" class="dropdown-item">Spacecraft Drag</a></li>
+                                <li><a href="{% url 'plots_delta_v' %}" class="dropdown-item"><font color="white">Delta-V for Alt Drop</a></font></li>
+                                <li><a href="{% url 'plots_sc_drag' %}" class="dropdown-item"><font color="white">Spacecraft Drag</a></font></li>
                             </ul>
                         </li>
                     </ul>        
@@ -109,9 +108,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6  ml-auto mr-auto text-center">
-                        <!-- <h4><i class="fa fa-phone"></i> 1800-355-4322</h4> -->
                         <h4><i class="fa fa-envelope"></i> info@totalimpulse.net</h4>
-                        <p>&copy; Copyright 2017. TotalImpulse.net</p>
                     </div>
                 </div>
             </div>

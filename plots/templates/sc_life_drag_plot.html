@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+
 {% block extra_head %}
 	<script type="text/x-mathjax-config">
 	MathJax.Hub.Config({
@@ -19,17 +20,24 @@
 	{% endif %}
 {% endblock %}
 
+
+{% block non_blog_title %}
+    <title>Total Impulse: Spacecraft Drag Calculator</title>
+{% endblock %}
+
+
 {% block pagetitle %}
     <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/background.jpg" %}"'')>
         <div class="container">
             <div class="row">
                 <div class=" col-md-8 ml-auto mr-auto">
-                    <h1 class='text-uppercase'>Spacecraft Drag Compensation</h1>
+                    <h1>Spacecraft Drag Compensation</h1>
                 </div>
             </div>
         </div>
     </div><!--page title end-->
 {% endblock %}
+
 
 {% block content %}
 	<div class="page-footer-sticky">
@@ -62,7 +70,9 @@
 					</p>
 
 					{% if bokeh_plot_div %}
-						<p>{{bokeh_plot_div|safe}}</p>
+						<div align="center">
+							{{bokeh_plot_div|safe}}
+						</div>
 					{% else %}
 						<form action="" method="post">
 						    {% csrf_token %}
