@@ -52,10 +52,10 @@
 					<p>
 						The major assumptions are:
 						<ul>
-							<li>The maneuver(s) required to drop the separation altitude to the mission altitude use the maximum efficiency combined plane change technique (discussed in textbooks and <a href="http://www.braeunig.us/space/orbmech.htm#maneuver">here</a>, maintain sun synchronous orbit, and the orbit is circular</li>
-							<li>The <a href="https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php">NRLMSISE-00</a> atmospheric model is used, taking into account maximum solar cycle F10.7 and ap indices (further information <a href="https://www.totalimpulse.net/blog/first-spacecraft-propulsion-calculators/">here</a>), but the atmosphere's properties do not evolve with time as the calculation is run (ie frozen conditions). For high total impulse missions (ie long), this static atmosphere will introduce error</li>
+							<li>The maneuver(s) required to drop the separation altitude to the mission altitude a) use the maximum efficiency combined plane change technique (discussed in various textbooks and presented <a href="http://www.braeunig.us/space/orbmech.htm#maneuver">here</a>), b) maintain sun synchronous orbit, and c) utilize a circular orbit</li>
+							<li>The <a href="https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php">NRLMSISE-00</a> atmospheric model is used, taking into account maximum solar cycle F10.7 and ap indices (further information <a href="https://www.totalimpulse.net/blog/first-spacecraft-propulsion-calculators/">here</a>), but the atmosphere's properties do not evolve with time as the calculation is run (ie frozen conditions). For high total impulse missions (ie long missions), this static atmosphere will introduce error but is OK for initial estimates</li>
 							<li>The frozen atmospheric conditions are at worst case solar cycle (40% of the 11 year cycle)</li>
-							<li>Does not account for other delta-V or propellant uses like momentum dumping, separation clean-up, phasing, stationkeeping, etc</li>
+							<li>Does not account for other delta-V or propellant uses like momentum dumping, separation clean-up, phasing, stationkeeping, etc. These can be significant so beware the calculation is only for drag compensation</li>
 							<li>The mission altitude is between 150 and 500 km</li>
 						</ul>
 					</p>
@@ -63,10 +63,21 @@
 					<p>
 						This calculator follows these major steps:
 						<ol>
-							<li>Delta-V to drop a circular orbit's altitude while maintaining sun synchronicity is calculated as (further info <a href="{% url 'plots_delta_v' %}">here</a>) $$dV = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}}$$ where $$v = \sqrt{ \frac{\mu}{r_{earth} + alt}}$$</li>
-							<li>The atmospheric model incorporating solar cycle based F10.7 and ap indices calculates the atmosphere's density for the given altitude. The density is used to determine drag force experienced by the spacecraft as $$F_{d} = \frac{1}{2} \rho A_{wet} C_{d} v^2$$</li>
-							<li>Total delta-V capability onboard is expressed as \(dV_{total} = \frac{I_{T}}{m}\). Lifetime at a given altitude can be thought of as the velocity change capability remaining divided by the deceleration due to drag and is then calculated as $$L = \frac{ dV_{total} - dV_{alt drop} }{\dfrac{F_{d}}{m}}$$</li>
-							<li>Both drag force and time until propellant depletion is plotted</li>
+							<li>
+								Delta-V to drop a circular orbit's altitude while maintaining sun synchronicity is calculated as (further info <a href="{% url 'plots_delta_v' %}">here</a>)
+								$$\begin{equation} \Delta V_{alt drop} = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}} \label{e:combined_dv} \end{equation}$$ where
+								$$\begin{equation} v = \sqrt{ \frac{\mu}{r_{earth} + alt}} \label{e:velocity} \end{equation}$$
+							</li>
+							<li>
+								The atmospheric model incorporating solar cycle based F10.7 and ap indices calculates the atmosphere's density for the given altitude. The density is used to determine drag force experienced by the spacecraft as $$\begin{equation} F_{d} = \frac{1}{2} \rho A_{wet} C_{d} v^2 \label{e:drag} \end{equation}$$
+							</li>
+							<li>
+								Total delta-V capability onboard is expressed as \(\Delta V_{total} = \frac{I_{T}}{m}\). Lifetime at a given altitude can be thought of as the velocity change capability remaining divided by the deceleration due to drag and is then calculated as
+								$$\begin{equation} L = \frac{ \Delta V_{total} - \Delta V_{alt drop} }{\dfrac{F_{d}}{m}} \label{e:life} \end{equation}$$
+							</li>
+							<li>
+								Both drag force from Equation \ref{e:drag} and time until propellant depletion from Equation \ref{e:life} are plotted
+							</li>
 						</ol>
 					</p>
 

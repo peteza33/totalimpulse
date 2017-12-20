@@ -60,10 +60,22 @@
 						The calculator follows these major steps:
 
 						<ol>
-							<li>The velocity of a circular orbit is defined as $$v = \sqrt{ \frac{\mu}{r_{earth} + alt}}$$ and a Hohmann transfer, the most fuel-efficient transfer between two circular coplanar orbits, is defined as $$dV_{Hohmann} = \bigg[ \sqrt{ \mu \Big( \dfrac{2}{r_{i}} - \dfrac{1}{a_{transfer}} \Big)} - v_{i} \bigg] + \bigg[ v_{f} - \sqrt{ \mu \Big( \dfrac{2}{r_{f}} - \dfrac{1}{a_{transfer}} \Big)} \bigg] $$</li>
-							<li>The velocity change for a plane change is defined as $$dV_{incl} = 2 v_{i} \sin \theta $$</li>
-							<li>The total 2-step process is then \(dV_{total} = dV_{Hohmann} + dV_{incl}\)</li>
-							<li>The combined altitude drop and plane change velocity change is $$dV_{combined} = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}}$$</li>
+							<li>
+								The velocity of a circular orbit is defined as $$\begin{equation} v = \sqrt{ \frac{\mu}{r_{earth} + alt}} \label{e:velocity} \end{equation}$$ and a Hohmann transfer, the most fuel-efficient transfer between two circular coplanar orbits, is defined as
+								 $$\begin{equation} \Delta V_{Hohmann} = \left[ \sqrt{ \mu \left( \dfrac{2}{r_{i}} - \dfrac{1}{a_{transfer}} \right)} - v_{i} \right] + \left[ v_{f} - \sqrt{ \mu \left( \dfrac{2}{r_{f}} - \dfrac{1}{a_{transfer}} \right)} \right] \label{e:hohmann} \end{equation}$$
+							</li>
+							<li>
+								The velocity change for a plane change is defined as $$\begin{equation} \Delta V_{incl} = 2 v_{i} \sin \theta \label{e:incl} \end{equation}$$
+							</li>
+							<li>
+								The total 2-step process is then $$\begin{equation} \Delta V_{total} = \Delta V_{Hohmann} + \Delta V_{incl} \label{e:total} \end{equation}$$
+							</li>
+							<li>
+								The combined altitude drop and plane change velocity change is $$\begin{equation} \Delta V_{combined} = \sqrt{v_{i}^2 + v_{f}^2 - 2 v_{i} v_{f} \cos{\theta}} \label{e:combined} \end{equation}$$
+							</li>
+							<li>
+								A comparison of the \( \Delta V \) from both Equation \ref{e:total} and Equation \ref{e:combined} is plotted. The combined maneuver is significantly 'cheaper' in terms of velocity change
+							</li>
 						</ol>
 					</p>
 					
@@ -78,7 +90,6 @@
 						<input type="submit" class="btn btn-primary mb5" value="Submit" />
 						</form>
 					{% endif %}
-					<!-- <h2><a href = "{% url 'plots_home' %}">back to plots</a></h2> -->
 				</div>
 			</div>
 		</div>

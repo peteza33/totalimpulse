@@ -4,43 +4,10 @@ from bokeh.plotting import figure
 from bokeh.embed import components
 from bokeh.models import LinearAxis, Range1d
 
-from .forms import plot_line_form, sc_life_form, delta_v_form
-
-def plots_home(request):
-	return render(request, 'plot_home.html', {})
+from .forms import sc_life_form, delta_v_form
 
 
-def plots_line(request):
-	if request.method == 'POST':
-		form = plot_line_form(request.POST)
-		if form.is_valid():
-			data = form.cleaned_data
-
-			x_1 = data['x_1']
-			x_2 = data['x_2']
-			y_1 = data['y_1']
-			y_2 = data['y_2']
-
-			x = [x_1, x_2]
-			y = [y_1, y_2]
-
-			plot = figure(title = 'Line Plot', x_axis_label = 'X', y_axis_label = 'Y')
-
-			plot.line(x, y)
-			plot.circle(x, y)
-
-			plot.toolbar.logo = None
-
-			script, div = components(plot)
-
-			return render(request, "line_plot.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
-	else:
-		form = plot_line_form()
-
-	return render(request, "line_plot.html", {'form': form})
-
-
-def sc_life_plot(request):
+def sc_life(request):
 	if request.method == 'POST':
 		form = sc_life_form(request.POST)
 		if form.is_valid():
