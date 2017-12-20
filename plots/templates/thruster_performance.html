@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block extra_head %}
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "all" } }
+	});
+	</script>
+
+	<script type="text/javascript" async
+	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+	</script>
+
+	{% if bokeh_plot_script %}
+		<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css" type="text/css" />
+		<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
+		{{bokeh_plot_script|safe}}
+	{% endif %}
+{% endblock %}
+
+
+{% block non_blog_title %}
+    <title>Total Impulse: Thruster Performance</title>
+{% endblock %}
+
+
+{% block pagetitle %}
+    <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/background.jpg" %}"'')>
+        <div class="container">
+            <div class="row">
+                <div class=" col-md-8 ml-auto mr-auto">
+                    <h1>Chemical Thruster Performance</h1>
+                </div>
+            </div>
+        </div>
+    </div><!--page title end-->
+{% endblock %}
+
+
+{% block content %}
+	<div class="page-footer-sticky">
+        <div class="footer-sticky-wrap">
+            <div class="footer-sticky-inner">
+            	<div class="pt30 pb40 container">
+            		<p>
+            			In order to predict delivered impulse, a detailed model of thruster performance that includes the effects of thermal transients and losses is required. We start by writing the quasi-steady state (zero thermal mass gas) combustion chamber gas-side energy balance as
+            			$$\begin{equation} \dot{Q}_{Comb} - \dot{Q}_{Wall} = \dot{m}(h_c - h_0) = \dot{m}\int_{T_0}^{T_c} C_p(T)dT \label{e:gas_balance} \end{equation}$$
+            			where \( \dot{Q}_{Comb} \) is the combustion heat flux, \( \dot{Q}_{Wall} \) is the chamber wall heat flux, \( \dot{m} \) is the mass flow rate, \( h \) is the convective heat transfer coefficient, and \( C_{p} \) is the specific heat at constant pressure. 
+            		</p>
+            		<p>
+            			Writing the combustion chamber wall energy balance as
+            			$$ \begin{equation} \dot{Q}_{Wall} - \sigma \epsilon A_{w} (T_{w}^4 - T_\infty^4) = \frac{dT_{w}}{dt}m_{w}C_{w} \label{e:wall_balance} \end{equation}$$
+            			where \( A_{w} \) is the chamber wall area, \( m_{w} \) is the mass of the chamber wall, \( C_{w} \) is the specific heat of the chamber wall, and \( T_{w} \) is the chamber wall temperature
+            		</p>
+            		<p>
+            			Expanding \( \dot{Q}_{Comb} \) as $$\begin{equation} \dot{Q}_{Comb} = \dot{m}\Delta h_{rxn} \label{e:combustion_heatflux} \end{equation}$$ where \( \Delta h_{rxn} \) is the enthalpy of reaction and expanding \( \dot{Q}_{Wall} \) to $$\begin{equation} \dot{Q}_{Wall} = hA_{w}\left(T_c-T_{w}\right) \label{e:wall_heatflux} \end{equation}$$ with \( T_{c} \) being the combustion temperature. Here we note that Equation \ref{e:combustion_heatflux} applies when the engine is ON, and \( \dot{Q}_{Comb} = 0 \) when it is OFF.
+            		</p>
+            		<p>
+            			Then define $$\begin{equation} \overline{C}_p \equiv \frac{\int_{T_0}^{T_c} C_p(T)dT}{T_c-T_0} \label{e:specific_heat} \end{equation}$$ such that Equation \ref{e:gas_balance} is rewritten with Equations \ref{e:combustion_heatflux} and \ref{e:wall_heatflux} as $$\begin{equation} \dot{m}\Delta h_{rxn} - hA_{w}\left(T_c-T_{w}\right) = \dot{m}\left(T_c - T_0\right)\overline{C}_p \label{e:gas_balance_rewrite} \end{equation}$$ with \( \overline{C}_{p} \) representing the average specific heat at constant pressure and Equation \ref{e:wall_balance} is similarly rewritten as $$\begin{equation} hA_{w}\left(T_c-T_{w}\right) - \sigma \epsilon A_{w} (T_{w}^4 - T_\infty^4) = \dot{T}_{w}m_{w}C_{w}(T_{w}) \label{e:wall_balance_rewrite} \end{equation}$$
+            		</p>
+            		<p>
+            			Now, combining terms in Equations \ref{e:gas_balance_rewrite} and \ref{e:wall_balance_rewrite} results in $$\begin{equation} \dot{T}_{w} = \frac{hA_{w}\left(T_c-T_{w}\right) - \sigma \epsilon A_{w} (T_{w}^4 - T_\infty^4)}{m_{w}C_{w}(T_{w})} \label{e:wall_temp_dot} \end{equation}$$ and
+            			$$\begin{equation} T_c = \frac{\dot{m}\Delta h_{rxn} + hA_{w}T_{w} + \dot{m}\overline{C}_p T_0}{\dot{m}\overline{C}_p + hA_{w}} \label{e:combustion_temp} \end{equation}$$
+            		</p>
+            		<p>
+            			This is not linear in \( T_c \) so not solvable in closed-form. However, it can be solved numerically. Because the combustion reaction is extremely complex, \( \Delta h_{rxn} \) must be calculated with a chemical equilibrium solver such as <a href="https://cearun.grc.nasa.gov/">CEA</a>. This will also provide us with a number of other useful parameters associated with the combustion reaction.
+            		</p>
+            		<p>
+            			Taking <a href="http://ecaps.space/products/increased-performance-and-reduced-mission-costs/">LMP-103S</a>, a liquid monopropellant blend, as our example, a CEA analysis gives the following output:
+            			<!-- Placeholder for CEA output -->
+            			A quick note on the output, it predicts an \( I_{sp} \) of 248 s which is substantially higher than ECAPS acceptance data 231-232 s. This is due to combustion inefficiency not accounted for as well as radiative heat loss from the thruster. We will account for radiative heat loss directly and accommodate combustion efficiency with an empirical combustion efficiency factor, \( \eta_c \) that we will adjust in order to produce a steady-state \( I_{sp} \) of 231-232 s.
+            		</p>
+            		<p>
+            			While CEA provides gas enthalpy \( H \) directly at various states, it is difficult to use because it is defined at a particular equilibrium temperature and gas composition. A more useful thing to look at is the equilibrium chamber temperature and mean gas specific heat \( \overline{C}_{p} \) under the definition
+            			$$\begin{equation} \Delta h_{rxn} \equiv \eta_c ( T_c^i - T_0)\overline{C}_p \label{e:ethalpy_reaction} \end{equation}$$ Here \( T_c^i \) is the ideal combustion chamber gas temperature as predicted by CEA. Once Equation \ref{e:combustion_temp} is solved, the characteristic velocity \( c^* \) is determined by $$\begin{equation} c^* = \sqrt{\frac{R_{u}T_c}{\gamma M_{w} \left(\frac{2}{\gamma+1}\right)^{\frac{\gamma+1}{\gamma-1}}}} \label{e:cstar} \end{equation}$$ Then, the effective exhaust velocity and thrust can be found with
+            			$$\begin{equation} c = C_{f}c^* \label{e:exhaust_velocity} \end{equation}$$ and $$\begin{equation} F = c\dot{m} \label{e:thrust} \end{equation}$$
+            		</p>
+            		<p>
+            			Plotting the above equations, it is clear that the thermal time constant of the thruster is large compared with the 1 Hz pulse rate,\( \tau_T >> 1 \: \text{s} \). We can therefore define a quasi-steady state condition as the mean of some thruster parameters (\( T_c \), \( c^* \)) over a time scale longer than the pulse time. The simplest way to approach this is to look at the equations derived above in the limit of pulse-time going to 0. In that case, we define
+            			$$\begin{equation} \overline{\dot{m}}(P_{f}) \equiv D\dot{m}(P_{f}) \end{equation}$$ where \( D \) is the duty cycle. Also, in the quasi-steady state, \( \dot{T}_w = 0 \). Therefore, we can simplify the energy balance from earlier to
+            			$$\begin{equation}  hA_{w}\left(T_c-T_{w}\right) = \sigma \epsilon A_{w} (T_{w}^4 - T_\infty^4) \end{equation}$$ or $$\begin{equation} T_c = \frac{\sigma \epsilon A_{w} (T_{w}^4 - T_\infty^4)}{hA_{w}} + T_{w} \end{equation}$$ and $$\begin{equation} T_c = \frac{\overline{\dot{m}}\Delta h_{rxn} + hA_{w}T_{w} + \overline{\dot{m}}\overline{C}_p T_0}{\overline{\dot{m}}\overline{C}_p + hA_{w}} \end{equation}$$
+            		</p>
+            		<p>
+            			Combining together results in $$\begin{equation} \frac{\overline{\dot{m}}\Delta h_{rxn} + hA_{w}T_{w} + \overline{\dot{m}}\overline{C}_p T_0}{\overline{\dot{m}}\overline{C}_p + hA_{w}} - \frac{\sigma \epsilon A_{w} (T_{w}^4 - T_\infty^4)}{hA_{w}} - T_{w}= 0 \end{equation}$$ from which we can solve for \( T_w \) and then for \( T_c \). No longer a differential equation, it is still non-linear in \( T_c \) so requires a numerical solution. <!-- The results of this quasi-steady state are plotted for in Figure \ref{fig_hotfire_ISP}. --> The model fits fairly well although there is some divergence at low  feed pressure. There are a variety of unaccounted factors such as variability in  \( C_p \)  over temperature, flow losses in nozzle, etc. 
+            		</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

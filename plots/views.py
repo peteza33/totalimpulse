@@ -299,3 +299,7 @@ def delta_v(request):
 		form = delta_v_form()
 
 	return render(request, "delta_v_plot.html", {'form': form})
+
+
+def thruster_performance(request):
+	return render(request, 'thruster_performance.html', {})
