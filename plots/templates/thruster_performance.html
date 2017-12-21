@@ -86,7 +86,17 @@
             		<p>
             			Combining together results in $$\begin{equation} \frac{\overline{\dot{m}}\Delta h_{rxn} + hA_{w}T_{w} + \overline{\dot{m}}\overline{C}_p T_0}{\overline{\dot{m}}\overline{C}_p + hA_{w}} - \frac{\sigma \epsilon A_{w} (T_{w}^4 - T_\infty^4)}{hA_{w}} - T_{w}= 0 \end{equation}$$ from which we can solve for \( T_w \) and then for \( T_c \). No longer a differential equation, it is still non-linear in \( T_c \) so requires a numerical solution. <!-- The results of this quasi-steady state are plotted for in Figure \ref{fig_hotfire_ISP}. --> The model fits fairly well although there is some divergence at low  feed pressure. There are a variety of unaccounted factors such as variability in  \( C_p \)  over temperature, flow losses in nozzle, etc. 
             		</p>
-
+                    {% if bokeh_plot_div %}
+                        <div align="center">
+                            {{bokeh_plot_div|safe}}
+                        </div>
+                    {% else %}
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <input type="submit" class="btn btn-primary mb5" value="Submit" />
+                        </form>
+                    {% endif %}
 				</div>
 			</div>
 		</div>

@@ -31,3 +31,4 @@ Willow==1.0
 google-cloud-storage==1.4.0
 django-storages==1.6.5
 django-crispy-forms==1.7.0
+scipy==1.0.0
