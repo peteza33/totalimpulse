@@ -53,7 +53,7 @@
 						The major assumptions are:
 						<ul>
 							<li>The maneuver(s) required to drop the separation altitude to the mission altitude a) use the maximum efficiency combined plane change technique (discussed in various textbooks and presented <a href="http://www.braeunig.us/space/orbmech.htm#maneuver">here</a>), b) maintain sun synchronous orbit, and c) utilize a circular orbit</li>
-							<li>The <a href="https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php">NRLMSISE-00</a> atmospheric model is used, taking into account maximum solar cycle F10.7 and ap indices (further information <a href="https://www.totalimpulse.net/blog/first-spacecraft-propulsion-calculators/">here</a>), but the atmosphere's properties do not evolve with time as the calculation is run (ie frozen conditions). For high total impulse missions (ie long missions), this static atmosphere will introduce error but is OK for initial estimates</li>
+							<li>The <a href="https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php">NRLMSISE-00</a> atmospheric model is used, taking into account maximum solar cycle F10.7 and ap indices (further information on the model is <a href="https://www.totalimpulse.net/blog/atmospheric-drag-spacecraft/">here</a>), but the atmosphere's properties do not evolve with time as the calculation is run (ie frozen conditions). For high total impulse missions (ie long missions), this static atmosphere will introduce error but is OK for initial estimates</li>
 							<li>The frozen atmospheric conditions are at worst case solar cycle (40% of the 11 year cycle)</li>
 							<li>Does not account for other delta-V or propellant uses like momentum dumping, separation clean-up, phasing, stationkeeping, etc. These can be significant so beware the calculation is only for drag compensation</li>
 							<li>The mission altitude is between 150 and 500 km</li>
@@ -61,7 +61,7 @@
 					</p>
 
 					<p>
-						This calculator follows these major steps:
+						The major steps are:
 						<ol>
 							<li>
 								Delta-V to drop a circular orbit's altitude while maintaining sun synchronicity is calculated as (further info <a href="{% url 'plots_delta_v' %}">here</a>)
