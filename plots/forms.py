@@ -26,7 +26,15 @@ class thruster_performance_form(forms.Form):
 	h = forms.FloatField(min_value = 0, label = 'Heat Transfer Coefficient (W/m^2-K)', initial = '500')
 	wall_mass = forms.FloatField(min_value = 0, label = 'Chamber Wall Mass (kg)', initial = '0.01')
 	Cw = forms.FloatField(min_value = 0, label = 'Chamber Wall Specific Heat (J/kg-K)', initial = '137')
-	eta_c = forms.FloatField(min_value = 0, label = 'Combustion Efficieny (Eta)', initial = '0.94')
+	eta_c = forms.FloatField(min_value = 0, max_value = 1.0, label = 'Combustion Efficieny (Eta)', initial = '0.94')
 	maneuver_press = forms.FloatField(min_value = 0, label = 'Maneuver Pressure to Simulate (bar)', initial = '18.5')
 	maneuver_time = forms.IntegerField(min_value = 0, label = 'Maneuver Time to Simulate (sec)', initial = '10')
 	duty_cycle = forms.FloatField(min_value = 0, label = 'Maneuver Duty Cycle to Simulate (0.0 to 1.0)', initial = '1.0')
+
+class ep_prop_dutycycle_form(forms.Form):
+	isp = forms.FloatField(min_value = 0, max_value = 10000, label = 'Specific Impulse (sec)', initial = '1000')
+	area = forms.FloatField(min_value = 0.0, label = 'Wetted Area (m2)', initial = '0.57')
+	Cd = forms.FloatField(min_value = 0.0, label = 'Coefficient of Drag (Cd)', initial = '2.2')
+	time = forms.FloatField(min_value = 0.0, label = 'Duration (days)', initial = '365')
+	eta_t = forms.FloatField(min_value = 0.0, max_value = 1.0, label = 'Total Efficiency (for Duty Cycle)', initial = '0.3')
+	altitude = forms.FloatField(min_value = 150, max_value = 500, label = 'Altitude (for Duty Cycle) (km)', initial = '250')

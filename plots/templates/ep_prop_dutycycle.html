@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block extra_head %}
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "all" } }
+	});
+	</script>
+
+	<script type="text/javascript" async
+	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+	</script>
+
+	{% if bokeh_plot_script %}
+		<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css" type="text/css" />
+		<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
+		{{bokeh_plot_script|safe}}
+		{{bokeh_plot_script_2|safe}}
+	{% endif %}
+{% endblock %}
+
+
+{% block non_blog_title %}
+    <title>Total Impulse: EP Propellant & Duty Cycle</title>
+{% endblock %}
+
+
+{% block pagetitle %}
+    <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/background.jpg" %}"'')>
+        <div class="container">
+            <div class="row">
+                <div class=" col-md-8 ml-auto mr-auto">
+                    <h1>Electric Propulsion Propellant & Duty Cycle</h1>
+                </div>
+            </div>
+        </div>
+    </div><!--page title end-->
+{% endblock %}
+
+
+{% block content %}
+	<div class="page-footer-sticky">
+        <div class="footer-sticky-wrap">
+            <div class="footer-sticky-inner">
+            	<div class="pt30 pb40 container">
+            		<p>
+            			Mentioned in the latter half of <a href = "https://www.totalimpulse.net/blog/atmospheric-drag-spacecraft/">this</a> blog post, we estimate the propellant required to compensate for drag at a given altitude as shown in Equation \ref{propellant}
+            			$$\begin{equation} m_{prop} = \frac{F_{d}t}{I_{sp}g_0} \label{propellant} \end{equation}$$
+            			(further discussion on the drag force  \( F_d \) can be found <a href="{% url 'plots_sc_drag' %}">here</a>).
+            			Here it is important to note that we're assuming the spacecraft mass does not appreciable change between the start and conclusion of any individual drag compensation event (ie the propellant consumed per-burn is small compared to the spacecraft mass) which holds up well for electric propulsion systems. This allows for the calculation of propellant mass without knowledge of spacecraft mass (and therefore without needing the rocket equation). 
+            		</p>
+            		<p>
+            			Propellant mass is reduced by using a system with high Isp. However, there is an intrinsic physics based trade-off in any EP system that relates specific impulse, power, and thrust. Skipping the development of the equation and simply stating the thrust of an electric propulsion system as shown in Equation \ref{thrust}
+            			$$\begin{equation} F = \frac{2\eta_{t}P_{in}}{I_{sp}g_0} \label{thrust} \end{equation}$$
+            			The key to note is for a given electrical power input, the thrust of an EP system is inversely proportional
+						to the specific impulse. This means that high Isp systems will have a lower thrust at the same power
+						and will thus need to operate for a longer duration to offset drag. Using Equation \ref{thrust}, the relationship
+						between the time an EP system must operate to the total mission time can be found by equating the
+						thrust impulse to the drag impulse and results in
+						$$\begin{equation} \frac{t_{thrust}}{t_{mission}} = \frac{F_{d}gI_{sp}}{2\eta_{t}P_{in}} \label{dutycycle} \end{equation}$$
+            		</p>
+            		<p>
+            			The form below plots results for both propellant mass from Equation \ref{propellant} and thruster duty cycle to achieve drag compensation of 40% solar cycle from Equation \ref{dutycycle}
+            		</p>
+
+					{% if bokeh_plot_div %}
+						<div align="center">
+							{{bokeh_plot_div|safe}}
+						</div>
+						<div align="center">
+							{{bokeh_plot_div_2|safe}}
+						</div>
+					{% else %}
+						<form action="" method="post">
+						    {% csrf_token %}
+						    {{ form|crispy }}
+					    	<input type="submit" class="btn btn-primary mb5" value="Submit" />
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

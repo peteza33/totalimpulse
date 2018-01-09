@@ -4,7 +4,7 @@ from bokeh.plotting import figure
 from bokeh.embed import components
 from bokeh.models import LinearAxis, Range1d
 
-from .forms import sc_life_form, delta_v_form, thruster_performance_form
+from .forms import sc_life_form, delta_v_form, thruster_performance_form, ep_prop_dutycycle_form
 
 
 def sc_life(request):
@@ -347,7 +347,109 @@ def thruster_performance(request):
 			script, div = components(plot)
 
 			return render(request, "thruster_performance.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
+	
 	else:
 		form = thruster_performance_form()
 
 	return render(request, "thruster_performance.html", {'form': form})
+
+
+def ep_prop_dutycycle(request):
+	if request.method == 'POST':
+		form = ep_prop_dutycycle_form(request.POST)
+
+		if form.is_valid():
+			data = form.cleaned_data
+
+			from plots import calcs
+			import numpy as np
+			import itertools
+
+			# Propellant Mass
+			altitudes = np.arange(150, 510, 5)
+			area = data['area']
+			Isp = data['isp']
+			Cd = data['Cd']
+			t = data['time']
+
+			F = 0.5 * calcs.rho * area * Cd * calcs.circular_velocity_np_func(altitudes) ** 2
+
+			mass = (F * (t * 86400)) / (Isp * 9.806)
+
+			# Create plot
+			plot = figure(
+				plot_width = 1000, 
+				plot_height = 800, 
+				y_axis_label = 'Mass (kg)',
+				x_axis_label = 'Altitude (km)',
+				title = 'Propellant Required to Compensate Drag for %.1f Days at 0.4 Solar Cycle' % t,
+				toolbar_location = "right",
+				y_axis_type = 'log',
+			)
+
+			# add data
+			plot.line(altitudes, mass)
+
+			# Formatting
+			plot.title.align = "center"
+			plot.toolbar.logo = None
+			plot.legend.location = "bottom_right"
+			plot.xaxis.axis_label_text_font_style = "normal"
+			plot.yaxis.axis_label_text_font_style = "normal"
+			plot.xaxis.axis_label_text_font_size = '12pt'
+			plot.yaxis.axis_label_text_font_size = '12pt'
+			plot.title.text_font_size = "12pt"
+			
+			# Embed plot elements
+			script, div = components(plot)
+
+
+			# Duty Cycle
+			alt = data['altitude']
+			eta_t = data['eta_t']
+
+			Isps = np.arange(0, 5000, 25)
+
+			density_dict = dict(zip(altitudes, calcs.rho))
+
+			F = 0.5 * density_dict[alt] * area * Cd * calcs.circular_velocity_np_func(alt) ** 2
+
+			powers = [100, 150, 200, 250, 300, 350, 400]
+
+			colors = itertools.cycle(('green', 'magenta', 'orange', 'blue', 'red', 'brown', 'darkorange'))
+
+			# Create plot2
+			plot2 = figure(
+				plot_width = 1000, 
+				plot_height = 800, 
+				y_axis_label = 'Duty Cycle',
+				x_axis_label = 'Specific Impulse (sec)',
+				title = 'Fraction of Mission Spent Thrusting to Compensate for Drag (%0.1f km, 0.4 solar cycle) ' % alt,
+				toolbar_location = "right",
+				y_axis_type = 'log',
+				y_range=(.01, 1)
+			)
+
+			# add data
+			for i in powers:
+				plot2.line(Isps, (F * 9.806 * Isps) / (2 * eta_t * i), legend = '%.0f W' % i, color = next(colors))
+
+			# formatting
+			plot2.title.align = "center"
+			plot2.toolbar.logo = None
+			plot2.legend.location = "bottom_right"
+			plot2.xaxis.axis_label_text_font_style = "normal"
+			plot2.yaxis.axis_label_text_font_style = "normal"
+			plot2.xaxis.axis_label_text_font_size = '12pt'
+			plot2.yaxis.axis_label_text_font_size = '12pt'
+			plot2.title.text_font_size = "12pt"
+
+			# embed plot2 elements
+			script2, div2 = components(plot2)
+
+			return render(request, "ep_prop_dutycycle.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div, 'bokeh_plot_script_2': script2, 'bokeh_plot_div_2': div2})
+
+	else:
+		form = ep_prop_dutycycle_form()
+
+	return render(request, "ep_prop_dutycycle.html", {'form': form})
