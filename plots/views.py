@@ -4,79 +4,135 @@ from bokeh.plotting import figure
 from bokeh.embed import components
 from bokeh.models import LinearAxis, Range1d
 
-from .forms import sc_life_form, delta_v_form, thruster_performance_form, ep_prop_dutycycle_form
+from .forms import sc_drag_form, delta_v_form, thruster_performance_form, ep_prop_dutycycle_form
 
 
-def sc_life(request):
+def sc_drag(request):
 	if request.method == 'POST':
-		form = sc_life_form(request.POST)
+		form = sc_drag_form(request.POST)
 
 		if form.is_valid():
 			data = form.cleaned_data
 
 			from plots import calcs
 			import numpy as np
+			import itertools
 
-			alt_initial = data['initial_altitdue']
-
-			alt_final_range = np.arange(150., 510., 5)
-			
+			"""
+			User Inputs
+			"""
 			m = data['mass'] # kg
 			area = data['area'] # m2
 			Cd = data['Cd']
-			total_impulse = data['total_impulse'] # N-s
-			DV_capability = total_impulse / m # m/s
-			    
-			# DV for drag after dropping altitude to mission orbit
-			remaining_DV = DV_capability - calcs.combined_alt_plane_change_SSO_np_func(alt_initial, alt_final_range)
+			life = data['Lifetime'] # years
 
-			# drag force
-			F = 0.5 * calcs.rho * area * Cd * calcs.circular_velocity_np_func(alt_final_range) ** 2 # N
+			altitudes = np.arange(150, 505, 5)
 
-			# remaining velocity capability on-board divided by acceleration due to drag -> time
-			life = remaining_DV / (F / m) * 3.17098e-8 # years
+			# impulse calc
+			F_zero = 0.5 * calcs.rho_zero * area * Cd * calcs.circular_velocity_np_func(altitudes) ** 2
+			F_five = 0.5 * calcs.rho_five * area * Cd * calcs.circular_velocity_np_func(altitudes) ** 2
 
-			# Create plot
-			plot = figure(
+			t = 3.154e7 * life
+
+			impulse_drag_zero = F_zero * t
+			impulse_drag_five = F_five * t 
+
+			# drag plot
+			drag = figure(
 				plot_width = 1000, 
 				plot_height = 800, 
-				y_axis_label = 'Time (years)',
+				y_axis_label = 'Drag Force (N)',
 				x_axis_label = 'Altitude (km)',
-				title = 'Spacecraft Drag Compensation Life after Dropping Altitude from %.0f km' % alt_initial,
-				toolbar_location = "below",
-				y_range = Range1d(0, 30),
+				title = 'Atmospheric Drag Force on a %.2f m2 and %.1f Cd Spacecraft' % (area, Cd),
+				toolbar_location = "right",
+				y_axis_type = 'log',
+				)
+
+			drag.line(altitudes, F_zero, legend = '0% Solar Cycle', color = 'blue')
+			drag.line(altitudes, F_five, legend = '50% Solar Cycle', color = 'red')
+
+			# formatting
+			drag.title.align = "center"
+			drag.toolbar.logo = None
+			drag.legend.location = "top_right"
+			drag.xaxis.axis_label_text_font_style = "normal"
+			drag.yaxis.axis_label_text_font_style = "normal"
+			drag.xaxis.axis_label_text_font_size = '12pt'
+			drag.yaxis.axis_label_text_font_size = '12pt'
+			drag.title.text_font_size = "12pt"
+			
+			# embed plot elements
+			script_drag, div_drag = components(drag)
+
+
+			# impulse plot
+			impulse = figure(
+				plot_width = 1000, 
+				plot_height = 800, 
+				y_axis_label = 'Total Impulse (kN-s)',
+				x_axis_label = 'Altitude (km)',
+				title = 'Total Impulse to Compensate for Drag Over %.1f Years' % life,
+				toolbar_location = "right",
+				y_axis_type = 'log',
 			)
 
-			# Add data
-			plot.circle(alt_final_range, life, color = 'blue')
-			plot.line(alt_final_range, life, legend = 'Lifetime', color = 'blue')
+			impulse.line(altitudes, impulse_drag_zero / 1000, legend = '0% Solar Cycle', color = 'blue')
+			impulse.line(altitudes, impulse_drag_five / 1000, legend = '50% Solar Cycle', color = 'red')
 
-			# secondary axis data
-			plot.extra_y_ranges = {"drag": Range1d(start = 0, end = 15)}
-			plot.add_layout(LinearAxis(y_range_name = "drag", axis_label = "Drag Force (mN)"), 'right')
-
-			plot.circle(alt_final_range, F * 1e3, y_range_name = "drag", color = 'red')
-			plot.line(alt_final_range, F * 1e3, y_range_name = "drag", legend = 'Drag', color = 'red')
-
-			# Formatting
-			plot.title.align = "center"
-			plot.toolbar.logo = None
-			plot.legend.location = "top_left"
-			plot.xaxis.axis_label_text_font_style = "normal"
-			plot.yaxis.axis_label_text_font_style = "normal"
-			plot.xaxis.axis_label_text_font_size = '12pt'
-			plot.yaxis.axis_label_text_font_size = '12pt'
-			plot.title.text_font_size = "12pt"
+			# formatting
+			impulse.title.align = "center"
+			impulse.toolbar.logo = None
+			impulse.legend.location = "top_right"
+			impulse.xaxis.axis_label_text_font_style = "normal"
+			impulse.yaxis.axis_label_text_font_style = "normal"
+			impulse.xaxis.axis_label_text_font_size = '12pt'
+			impulse.yaxis.axis_label_text_font_size = '12pt'
+			impulse.title.text_font_size = "12pt"
 			
-			# Embed plot elements
-			script, div = components(plot)
+			# embed plot elements
+			script_impulse, div_impulse = components(impulse)
 
-			return render(request, "sc_life_drag_plot.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
+
+			# propellant
+			propellant = figure(
+				plot_width = 1000, 
+				plot_height = 800, 
+				y_axis_label = 'Prop Mass (kg)',
+				x_axis_label = 'Altitude (km)',
+				title = 'Propellant to Compensate for Drag Over %.1f Years at 0.5 Solar Cycle' % life,
+				toolbar_location = "right",
+				y_axis_type = 'log',
+				)
+
+			colors = itertools.cycle(('green', 'magenta', 'orange', 'blue', 'red', 'brown', 'darkorange'))
+
+			for Isp in [250, 500, 1000, 1500]:
+				propellant.line(altitudes, impulse_drag_five / (Isp * 9.806), legend = 'Isp = %s sec' % Isp, color = next(colors))
+
+			# formatting
+			propellant.title.align = "center"
+			propellant.toolbar.logo = None
+			propellant.legend.location = "top_right"
+			propellant.xaxis.axis_label_text_font_style = "normal"
+			propellant.yaxis.axis_label_text_font_style = "normal"
+			propellant.xaxis.axis_label_text_font_size = '12pt'
+			propellant.yaxis.axis_label_text_font_size = '12pt'
+			propellant.title.text_font_size = "12pt"
+
+			# embed plot elements
+			script_propellant, div_propellant = components(propellant)
+
+			return render(request, "sc_drag_plot.html", 
+				{
+				"script_drag": script_drag, "div_drag": div_drag,
+				"script_impulse": script_impulse, 'div_impulse': div_impulse,
+				"script_propellant": script_propellant, "div_propellant": div_propellant,
+				})
 
 	else:
-		form = sc_life_form()
+		form = sc_drag_form()
 
-	return render(request, "sc_life_drag_plot.html", {'form': form})
+	return render(request, "sc_drag_plot.html", {'form': form})
 
 
 def delta_v(request):
@@ -365,66 +421,30 @@ def ep_prop_dutycycle(request):
 			import numpy as np
 			import itertools
 
-			# Propellant Mass
-			altitudes = np.arange(150, 510, 5)
+			# User inputs
+			altitudes = np.arange(150, 505, 5)
 			area = data['area']
-			Isp = data['isp']
 			Cd = data['Cd']
-			t = data['time']
-
-			F = 0.5 * calcs.rho * area * Cd * calcs.circular_velocity_np_func(altitudes) ** 2
-
-			mass = (F * (t * 86400)) / (Isp * 9.806)
-
-			# Create plot
-			plot = figure(
-				plot_width = 1000, 
-				plot_height = 800, 
-				y_axis_label = 'Mass (kg)',
-				x_axis_label = 'Altitude (km)',
-				title = 'Propellant Required to Compensate Drag for %.1f Days at 0.4 Solar Cycle' % t,
-				toolbar_location = "right",
-				y_axis_type = 'log',
-			)
-
-			# add data
-			plot.line(altitudes, mass)
-
-			# Formatting
-			plot.title.align = "center"
-			plot.toolbar.logo = None
-			plot.legend.location = "bottom_right"
-			plot.xaxis.axis_label_text_font_style = "normal"
-			plot.yaxis.axis_label_text_font_style = "normal"
-			plot.xaxis.axis_label_text_font_size = '12pt'
-			plot.yaxis.axis_label_text_font_size = '12pt'
-			plot.title.text_font_size = "12pt"
-			
-			# Embed plot elements
-			script, div = components(plot)
-
-
-			# Duty Cycle
 			alt = data['altitude']
 			eta_t = data['eta_t']
 
 			Isps = np.arange(0, 5000, 25)
 
-			density_dict = dict(zip(altitudes, calcs.rho))
+			density_dict = dict(zip(altitudes, calcs.rho_five))
 
 			F = 0.5 * density_dict[alt] * area * Cd * calcs.circular_velocity_np_func(alt) ** 2
 
-			powers = [100, 150, 200, 250, 300, 350, 400]
+			powers = [50, 100, 150, 200, 300, 400, 500]
 
 			colors = itertools.cycle(('green', 'magenta', 'orange', 'blue', 'red', 'brown', 'darkorange'))
 
 			# Create plot2
-			plot2 = figure(
+			duty = figure(
 				plot_width = 1000, 
 				plot_height = 800, 
 				y_axis_label = 'Duty Cycle',
 				x_axis_label = 'Specific Impulse (sec)',
-				title = 'Fraction of Mission Spent Thrusting to Compensate for Drag (%0.1f km, 0.4 solar cycle) ' % alt,
+				title = 'Fraction of Mission Spent Thrusting to Compensate for Drag (%.0f km, 0.5 solar cycle) ' % alt,
 				toolbar_location = "right",
 				y_axis_type = 'log',
 				y_range=(.01, 1)
@@ -432,22 +452,22 @@ def ep_prop_dutycycle(request):
 
 			# add data
 			for i in powers:
-				plot2.line(Isps, (F * 9.806 * Isps) / (2 * eta_t * i), legend = '%.0f W' % i, color = next(colors))
+				duty.line(Isps, (F * 9.806 * Isps) / (2 * eta_t * i), legend = '%.0f W' % i, color = next(colors))
 
 			# formatting
-			plot2.title.align = "center"
-			plot2.toolbar.logo = None
-			plot2.legend.location = "bottom_right"
-			plot2.xaxis.axis_label_text_font_style = "normal"
-			plot2.yaxis.axis_label_text_font_style = "normal"
-			plot2.xaxis.axis_label_text_font_size = '12pt'
-			plot2.yaxis.axis_label_text_font_size = '12pt'
-			plot2.title.text_font_size = "12pt"
+			duty.title.align = "center"
+			duty.toolbar.logo = None
+			duty.legend.location = "bottom_right"
+			duty.xaxis.axis_label_text_font_style = "normal"
+			duty.yaxis.axis_label_text_font_style = "normal"
+			duty.xaxis.axis_label_text_font_size = '12pt'
+			duty.yaxis.axis_label_text_font_size = '12pt'
+			duty.title.text_font_size = "12pt"
 
 			# embed plot2 elements
-			script2, div2 = components(plot2)
+			script, div = components(duty)
 
-			return render(request, "ep_prop_dutycycle.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div, 'bokeh_plot_script_2': script2, 'bokeh_plot_div_2': div2})
+			return render(request, "ep_prop_dutycycle.html", {"bokeh_plot_script": script, 'bokeh_plot_div': div})
 
 	else:
 		form = ep_prop_dutycycle_form()

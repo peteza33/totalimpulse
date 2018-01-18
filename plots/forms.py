@@ -1,11 +1,10 @@
 from django import forms
 
-class sc_life_form(forms.Form):
-	initial_altitdue = forms.FloatField(min_value = 150., max_value = 500., label = 'Initial Altitude (km)', initial = '500')
+class sc_drag_form(forms.Form):
 	mass = forms.FloatField(min_value = 0.0, label = 'Mass (kg)', initial = '110')
-	area = forms.FloatField(min_value = 0.0, label = 'Wetted Area (m2)', initial = '0.57')
+	area = forms.FloatField(min_value = 0.0, label = 'Wetted Area (m2)', initial = '0.8')
 	Cd = forms.FloatField(min_value = 0.0, label = 'Coefficient of Drag (Cd)', initial = '2.2')
-	total_impulse = forms.FloatField(min_value = 0.0, label = 'Total Impulse of System (N-s)', initial = '21000')
+	Lifetime = forms.FloatField(min_value = 0.0, label = 'Mission Lifetime (years)', initial = '5')
 
 class delta_v_form(forms.Form):
 	initial_altitude = forms.FloatField(min_value = 160., label = 'Initial Altitude (km)', initial = '500')
@@ -32,9 +31,7 @@ class thruster_performance_form(forms.Form):
 	duty_cycle = forms.FloatField(min_value = 0, label = 'Maneuver Duty Cycle to Simulate (0.0 to 1.0)', initial = '1.0')
 
 class ep_prop_dutycycle_form(forms.Form):
-	isp = forms.FloatField(min_value = 0, max_value = 10000, label = 'Specific Impulse (sec)', initial = '1000')
-	area = forms.FloatField(min_value = 0.0, label = 'Wetted Area (m2)', initial = '0.57')
+	area = forms.FloatField(min_value = 0.0, label = 'Area (m2)', initial = '0.80')
 	Cd = forms.FloatField(min_value = 0.0, label = 'Coefficient of Drag (Cd)', initial = '2.2')
-	time = forms.FloatField(min_value = 0.0, label = 'Duration (days)', initial = '365')
-	eta_t = forms.FloatField(min_value = 0.0, max_value = 1.0, label = 'Total Efficiency (for Duty Cycle)', initial = '0.3')
-	altitude = forms.FloatField(min_value = 150, max_value = 500, label = 'Altitude (for Duty Cycle) (km)', initial = '250')
+	eta_t = forms.FloatField(min_value = 0.0, max_value = 1.0, label = 'Total Efficiency of EP System', initial = '0.3')
+	altitude = forms.FloatField(min_value = 150, max_value = 500, label = 'Altitude (km)', initial = '250')

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block extra_head %}
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "all" } }
+	});
+	</script>
+
+	<script type="text/javascript" async
+	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+	</script>
+
+	{% if script_drag %}
+		<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css" type="text/css" />
+		<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
+		{{script_drag|safe}}
+		{{script_impulse|safe}}
+		{{script_propellant|safe}}
+	{% endif %}
+{% endblock %}
+
+
+{% block non_blog_title %}
+    <title>Total Impulse: Spacecraft Drag Compensation</title>
+{% endblock %}
+
+
+{% block pagetitle %}
+    <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/background.jpg" %}"'')>
+        <div class="container">
+            <div class="row">
+                <div class=" col-md-8 ml-auto mr-auto">
+                    <h1>Spacecraft Drag Compensation</h1>
+                </div>
+            </div>
+        </div>
+    </div><!--page title end-->
+{% endblock %}
+
+
+{% block content %}
+	<div class="page-footer-sticky">
+        <div class="footer-sticky-wrap">
+            <div class="footer-sticky-inner">
+            	<div class="pt30 pb40 container">
+					<p>
+						This tool estimates the effects of atmospheric drag on a given spacecraft design using the model described in <a href="https://www.totalimpulse.net/blog/atmospheric-drag-spacecraft/">this blog post</a>. The results are agnostic to propulsion technology, so apply to both chemical and EP systems. 
+					</p>
+
+					<p>
+						The major assumptions are:
+						<ul>
+							<li>Circular orbit</li>
+							<li>The <a href="https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php">NRLMSISE-00</a> atmospheric model is used, taking into account two points in the solar cycle (further information on the model is <a href="https://www.totalimpulse.net/blog/atmospheric-drag-spacecraft/">here</a>), but the atmosphere's properties do not evolve with time as the calculation is run (ie frozen conditions)</li>
+							<li>Does not account for other delta-V requirements or propellant uses like momentum dumping, separation clean-up, phasing, stationkeeping, etc. These can be significant so beware the calculation is only for drag compensation</li>
+						</ul>
+					</p>
+
+					<p>
+						The background equations are:
+						<ol>
+							<li>
+								Atmospheric density is determined from <a href="https://ccmc.gsfc.nasa.gov/modelweb/models/nrlmsise00.php">NRLMSISE-00</a> and used to calculate the drag force as Equation 1 below:
+								$$\begin{equation} F_{drag} = \frac{1}{2} \rho A_{wet} C_{d} v^2 \label{e:drag} \end{equation}$$
+							</li>
+							<li>
+								Total impulse is then calcualted from Equation 2:
+								$$\begin{equation} I_{T-drag} = t_{mission} F_{drag} \label{e:impulse} \end{equation}$$
+							</li>
+							<li>
+								Propellant required is finally calculated from Equation 3:
+								$$\begin{equation} m_{prop} = \frac{I_{T-drag}}{I_{sp}g_0} \label{e:prop} \end{equation}$$
+								Note: here propellant mass required to compensate for drag is found by equating the propulsion system impulse to the drag impulse. We make the approximation that the total spacecraft mass does not change appreciably between the start and conclusion of any individual thruster burn (ie that propellant consumed per-burn is small compared to the spacecraft mass). This allows us to arrive at a propellant mass without using the rocket equation and therefore results are independent of spacecraft mass. This also assumes the system's \( I_{sp} \) is constant over life
+							</li>
+						</ol>
+					</p>
+
+					{% if div_drag %}
+						<div align="center">
+							{{div_drag|safe}}
+						</div>
+						<div align="center">
+							{{div_impulse|safe}}
+						</div>
+						<div align="center">
+							{{div_propellant|safe}}
+						</div>
+					{% else %}
+						<form action="" method="post">
+						    {% csrf_token %}
+						    {{ form|crispy }}
+					    	<input type="submit" class="btn btn-primary mb5" value="Submit" />
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
