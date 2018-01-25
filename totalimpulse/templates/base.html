@@ -77,7 +77,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#/">Blog</a>
                              <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="/blog/" class="dropdown-item">Go to Posts</a></li>
+                                <li><a href="/blog/" class="dropdown-item">Blog Index</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -89,12 +89,18 @@
                                 <li><a href="{% url 'plots_ep_prop_dutycycle' %}" class="dropdown-item">EP Drag Duty Cycle</a></li>
                             </ul>
                         </li>
-                        <!-- <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
                             <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Prop News</a>
+                             <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="{% url 'latest_news' %}" class="dropdown-item">Latest Propulsion News</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">About</a>
                              <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="#" class="dropdown-item">Coming Soon</a></li>
                             </ul>
-                        </li> -->
+                        </li>
                     </ul>        
                 </div>
             </div>
