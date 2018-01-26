@@ -5,6 +5,7 @@ from collections import OrderedDict
 
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 # Setup django to get access to database
 import os
@@ -44,6 +45,9 @@ for i in range(len(companies)):
 		# get titles (with links)
 		titles = soup.find_all('h1', class_ = 'entry-title')
 
+		# published dates
+		dates = soup.find_all('time', class_ = 'published')
+
 		pre_url = 'https://www.accion-systems.com'
 	
 	elif list(companies.keys())[i] == 'ECAPS':
@@ -51,15 +55,17 @@ for i in range(len(companies)):
 		# get titles (with links)
 		titles = soup.find_all('h2', class_ = 'entry-title')
 
+		dates = soup.find_all('time', class_ = 'entry-date published updated')
+
 		pre_url = ''
 
-	# Create and save entires in database
+	# Create entires in database
 	for j in range(len(titles)):
 
 		# every site has the href buried differently...
 		if list(companies.keys())[i] == 'Aerojet':
 
-			p = NewsPost.objects.create(
+			obj, created = NewsPost.objects.update_or_create(
 			    company_name = 'Aerojet',
 			    title = titles[j].text,
 			    url = pre_url + titles[j].get('href'),
@@ -68,34 +74,27 @@ for i in range(len(companies)):
 			    category = 'Chemical',
 
 			)
-			p.save()
 
 		elif list(companies.keys())[i] == 'Accion':
 
-			p = NewsPost.objects.create(
+			obj, created = NewsPost.objects.update_or_create(
 			    company_name = 'Accion',
 			    title = titles[j].text,
 			    url = pre_url + titles[j].findChildren()[0].get('href'),
 			    sector = 'In-Space',
 			    tech = 'Electrospray', 
 			    category = 'EP',
+			    published = dates[j].get('datetime')
 			)
-			p.save()
 
 		elif list(companies.keys())[i] == 'ECAPS':
 
-			p = NewsPost.objects.create(
-			    company_name = 'Bradford ECAPS',
+			obj, created = NewsPost.objects.update_or_create(
+			    company_name = 'Bradford-ECAPS',
 			    title = titles[j].text,
 			    url = pre_url + titles[j].findChildren()[0].get('href'),
 			    sector = 'In-Space',
 			    tech = 'ADN', 
 			    category = 'Chemical',
+			    published = datetime.strptime(dates[j].text, '%B %d, %Y')
 			)
-			p.save()
-
-"""
-Look at update_or_create:
-
-obj, created = NewsPost.objects.update_or_create(company_name = 'Bradford ECAPS', sector = 'In-Space', tech = 'ADN', defaults={'category': 'EP'})
-"""

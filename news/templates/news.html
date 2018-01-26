@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row">
                 <div class=" col-md-8 ml-auto mr-auto">
-                    <h1>Propulsion News</h1>
+                    <h1>Updates from around the propulsion world</h1>
                 </div>
             </div>
         </div>
@@ -24,9 +24,98 @@
         <div class="footer-sticky-wrap">
             <div class="footer-sticky-inner">
             	<div class="pt30 pb40 container">
-                    <p>
-                    	Check Back Soon
-                    </p>
+
+                    <div>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs tabs-default mb30" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="active nav-link" href="#latest" aria-controls="latest" role="tab" data-toggle="tab">10 Most Recent</a></li>
+
+                            {% for i in companies %}
+                            <li class="nav-item" role="presentation"><a class="nav-link" href="#{{ i.company_name }}" aria-controls="{{ i.company_name }}" role="tab" data-toggle="tab">{{ i.company_name }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active show fade" id="latest">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Published</th>
+                                            <th>Most Recent</th>
+                                        </tr>
+                                    </thead>
+                                    {% for link in latest %}
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">{{link.published}}</th>
+                                                <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                            </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {% for i in companies %}
+                                <div role="tabpanel" class="tab-pane fade" id="{{i.company_name}}">
+                                    {% if i.company_name == 'Aerojet' %}
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Published</th>
+                                                    <th>Links to {{i.company_name}} News</th>
+                                                </tr>
+                                            </thead>
+                                            {% for link in aerojet %}
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">need number??</th>
+                                                        <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                    </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% elif i.company_name == 'Accion' %}
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Published</th>
+                                                    <th>Links to {{i.company_name}} News</th>
+                                                </tr>
+                                            </thead>
+                                            {% for link in accion %}
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">{{link.published}}</th>
+                                                        <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                    </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% elif i.company_name == 'Bradford-ECAPS' %}
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Published</th>
+                                                    <th>Links to {{i.company_name}} News</th>
+                                                </tr>
+                                            </thead>
+                                            {% for link in ecaps %}
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">{{link.published}}</th>
+                                                        <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                    </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
 				</div>
 			</div>
 		</div>

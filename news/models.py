@@ -12,3 +12,4 @@ class NewsPost(models.Model):
 	category = models.CharField(max_length = 250) # Chemical or Electric
 	created = models.DateTimeField(auto_now_add = True)
 	modified = models.DateTimeField(auto_now = True)
+	published = models.DateField(null = True)
