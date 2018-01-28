@@ -6,7 +6,7 @@ from .local import *
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -173,7 +173,7 @@ if os.getenv('GAE_INSTANCE'):
 
 # This is the human-readable name of your Wagtail install
 # which welcomes users upon login to the Wagtail admin.
-WAGTAIL_SITE_NAME = 'Blog'
+WAGTAIL_SITE_NAME = 'Prop Blog'
 
 # Override the search results template for wagtailsearch
 # WAGTAILSEARCH_RESULTS_TEMPLATE = 'myapp/search_results.html'

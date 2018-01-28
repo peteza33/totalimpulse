@@ -4,27 +4,34 @@ from .models import NewsPost
 
 def links(request):
 
+	# get entries
+	posts = NewsPost.objects.all()
+
 	# latest
-	latest = NewsPost.objects.all().order_by('-published')[:10]
+	most_recent =posts.order_by('-published')[:10]
 
 	# find original names are in the database
-	companies = NewsPost.objects.all().distinct('company_name')
+	companies = posts.distinct('company_name')
 
 	"""
-	filter by each company (probably a better way to do this but....)
+	filter by each company 
 	"""
-	aerojet = NewsPost.objects.filter(company_name__exact = 'Aerojet').order_by('created')
+	aerojet = posts.filter(company_name__exact = 'Aerojet').order_by('-published')
 
-	accion = NewsPost.objects.filter(company_name__exact = 'Accion').order_by('-published')
+	accion = posts.filter(company_name__exact = 'Accion').order_by('-published')
 
-	ecaps = NewsPost.objects.filter(company_name__exact = 'Bradford-ECAPS').order_by('-published')
+	ecaps = posts.filter(company_name__exact = 'Bradford-ECAPS').order_by('-published')
+
+	vacco = posts.filter(company_name__exact = 'VACCO').order_by('-published')
+
+	moog = posts.filter(company_name__exact = 'Moog').order_by('-published')
 
 	return render(request, 'news.html', {
-		'latest': latest,
+		'most_recent': most_recent,
 		'companies': companies,
 		'aerojet': aerojet,
 		'accion': accion,
 		'ecaps': ecaps,
+		'vacco': vacco,
+		'moog': moog,
 		})
-
-	# change all the 'create' to 'published' and the scraper is updated

@@ -23,6 +23,7 @@ companies = OrderedDict([
     ('Aerojet', 'http://www.rocket.com/content/aerojet-news'),
     ('Accion', 'https://www.accion-systems.com/news/'),
     ('ECAPS', 'http://ecaps.space/category/news/'),
+    ('VACCO', 'http://www.cubesat-propulsion.com/blog-news/')
 ])
 
 for i in range(len(companies)):
@@ -35,27 +36,31 @@ for i in range(len(companies)):
 	# Scrape titles & links from pages
 	if list(companies.keys())[i] == 'Aerojet':
 
-		# get titles (with links)
 		titles = soup.find_all(href = re.compile("article"))
 
 		pre_url = 'http://www.rocket.com'
 
 	elif list(companies.keys())[i] == 'Accion':
 
-		# get titles (with links)
 		titles = soup.find_all('h1', class_ = 'entry-title')
 
-		# published dates
 		dates = soup.find_all('time', class_ = 'published')
 
 		pre_url = 'https://www.accion-systems.com'
 	
 	elif list(companies.keys())[i] == 'ECAPS':
 
-		# get titles (with links)
 		titles = soup.find_all('h2', class_ = 'entry-title')
 
 		dates = soup.find_all('time', class_ = 'entry-date published updated')
+
+		pre_url = ''
+
+	elif list(companies.keys())[i] == 'VACCO':
+
+		titles = soup.find_all('h2', class_='entry-title')
+
+		dates = soup.find_all('time', class_='entry-date published')
 
 		pre_url = ''
 
@@ -95,6 +100,18 @@ for i in range(len(companies)):
 			    url = pre_url + titles[j].findChildren()[0].get('href'),
 			    sector = 'In-Space',
 			    tech = 'ADN', 
+			    category = 'Chemical',
+			    published = datetime.strptime(dates[j].text, '%B %d, %Y')
+			)
+
+		elif list(companies.keys())[i] == 'VACCO':
+
+			obj, created = NewsPost.objects.update_or_create(
+			    company_name = 'VACCO',
+			    title = titles[j].text,
+			    url = pre_url + titles[j].findChildren()[0].get('href'),
+			    sector = 'In-Space',
+			    tech = 'Cold Gas', 
 			    category = 'Chemical',
 			    published = datetime.strptime(dates[j].text, '%B %d, %Y')
 			)

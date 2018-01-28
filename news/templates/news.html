@@ -34,31 +34,38 @@
                             <li class="nav-item" role="presentation"><a class="nav-link" href="#{{ i.company_name }}" aria-controls="{{ i.company_name }}" role="tab" data-toggle="tab">{{ i.company_name }}</a></li>
                             {% endfor %}
 
+                            <li class="nav-item" role="presentation"><a class="nav-link" href="#more" aria-controls="more" role="tab" data-toggle="tab">(More Comming Soon)</a></li>
+
                         </ul>
 
                         <!-- Tab panes -->
+                        <!-- Latest -->
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active show fade" id="latest">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
                                             <th>Published</th>
-                                            <th>Most Recent</th>
+                                            <th>Company</th>
+                                            <th>Link</th>
                                         </tr>
                                     </thead>
-                                    {% for link in latest %}
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">{{link.published}}</th>
-                                                <td><a href="{{link.url}}">{{link.title}}</a></td>
-                                            </tr>
+                                    <tbody>
+                                    {% for link in most_recent %}
+                                        <tr>
+                                            <th scope="row">{{link.published}}</th>
+                                            <td>{{link.company_name}}</td>
+                                            <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                        </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
 
+                            <!-- Companies -->
                             {% for i in companies %}
                                 <div role="tabpanel" class="tab-pane fade" id="{{i.company_name}}">
+                                    
                                     {% if i.company_name == 'Aerojet' %}
                                         <table class="table table-hover">
                                             <thead>
@@ -67,15 +74,16 @@
                                                     <th>Links to {{i.company_name}} News</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
                                             {% for link in aerojet %}
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">need number??</th>
-                                                        <td><a href="{{link.url}}">{{link.title}}</a></td>
-                                                    </tr>
+                                                <tr>
+                                                    <th scope="row">{{link.published}}</th>
+                                                    <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                </tr>
                                             {% endfor %}
                                             </tbody>
                                         </table>
+                                    
                                     {% elif i.company_name == 'Accion' %}
                                         <table class="table table-hover">
                                             <thead>
@@ -84,15 +92,16 @@
                                                     <th>Links to {{i.company_name}} News</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
                                             {% for link in accion %}
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">{{link.published}}</th>
-                                                        <td><a href="{{link.url}}">{{link.title}}</a></td>
-                                                    </tr>
+                                                <tr>
+                                                    <th scope="row">{{link.published}}</th>
+                                                    <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                </tr>
                                             {% endfor %}
                                             </tbody>
                                         </table>
+                                    
                                     {% elif i.company_name == 'Bradford-ECAPS' %}
                                         <table class="table table-hover">
                                             <thead>
@@ -101,12 +110,48 @@
                                                     <th>Links to {{i.company_name}} News</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
                                             {% for link in ecaps %}
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">{{link.published}}</th>
-                                                        <td><a href="{{link.url}}">{{link.title}}</a></td>
-                                                    </tr>
+                                                <tr>
+                                                    <th scope="row">{{link.published}}</th>
+                                                    <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    
+                                    {% elif i.company_name == 'VACCO' %}
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Published</th>
+                                                    <th>Links to {{i.company_name}} News</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for link in vacco %}
+                                                <tr>
+                                                    <th scope="row">{{link.published}}</th>
+                                                    <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    
+                                    {% elif i.company_name == 'Moog' %}
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Published</th>
+                                                    <th>Links to {{i.company_name}} News</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for link in moog %}
+                                                <tr>
+                                                    <th scope="row">{{link.published}}</th>
+                                                    <td><a href="{{link.url}}">{{link.title}}</a></td>
+                                                </tr>
                                             {% endfor %}
                                             </tbody>
                                         </table>
