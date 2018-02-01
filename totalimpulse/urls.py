@@ -11,7 +11,7 @@ from wagtail.wagtailsearch import urls as wagtailsearch_urls
 
 from totalimpulse import views
 
-from plots import urls as plot_urls
+from tools import urls as tools_urls
 from news import urls as news_urls
 
 urlpatterns = [
@@ -21,8 +21,8 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^blog/', include(wagtail_urls)),
-    url(r'^plots/', include(plot_urls)),
-    url(r'^prop-news/', include(news_urls)),
+    url(r'^tools/', include(tools_urls)),
+    url(r'^news/', include(news_urls)),
 
     url(r'^$', views.home, name = 'home'),
 ]

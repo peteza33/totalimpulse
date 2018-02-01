@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from .models import NewsPost
 
-def links(request):
+def prop_news(request):
 
 	# get entries
 	posts = NewsPost.objects.all()
@@ -26,7 +26,7 @@ def links(request):
 
 	moog = posts.filter(company_name__exact = 'Moog').order_by('-published')
 
-	return render(request, 'news.html', {
+	return render(request, 'prop_news.html', {
 		'most_recent': most_recent,
 		'companies': companies,
 		'aerojet': aerojet,
@@ -35,3 +35,6 @@ def links(request):
 		'vacco': vacco,
 		'moog': moog,
 		})
+
+def sat_news(request):
+	return render(request, 'sat_news.html', {})

@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'taggit',
 
     'blog',
-    'plots',
+    'tools',
     'news',
 
     'storages',

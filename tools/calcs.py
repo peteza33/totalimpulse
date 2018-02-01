@@ -87,7 +87,6 @@ def combined_alt_plane_change_SSO(initial_alt, final_alt):
 	return np.sqrt(circular_velocity(initial_alt) ** 2 + circular_velocity(final_alt) ** 2 - \
 	               2 * circular_velocity(initial_alt) * circular_velocity(final_alt) * cos(delta_inclination/180. * pi))
 
-
 # Vectorized maneuvers
 circular_velocity_np_func = np.vectorize(circular_velocity)
 hohmann_transfer_np_func = np.vectorize(hohmann_transfer)

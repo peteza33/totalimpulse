@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 
-from plots import views
+from tools import views
 
 urlpatterns = [
     url(r'^sc-drag-comp/', views.sc_drag, name = 'plots_sc_drag'),

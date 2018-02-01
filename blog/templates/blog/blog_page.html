@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-
 {% load wagtailcore_tags wagtailimages_tags %}
 
+{% block extra_head %}
+<style>
+    img {
+        width: 100%;
+        height: auto;
+    }
+</style>
+{% endblock %}
 
 {% block pagetitle %}
     <div class="page-titles-img title-space-lg bg-parallax parallax-overlay mb70" data-jarallax='{"speed": 0.2}' style='background-image: url("{% static "images/background.jpg" %}"'')>
@@ -16,7 +23,6 @@
         </div>
     </div><!--page title end-->
 {% endblock %}
-
 
 {% block blogpost %}
     <div class="page-footer-sticky">
