@@ -14,7 +14,7 @@ def sc_drag(request):
 		if form.is_valid():
 			data = form.cleaned_data
 
-			from plots import calcs
+			from tools import calcs
 			import numpy as np
 			import itertools
 
@@ -143,7 +143,7 @@ def delta_v(request):
 			data = form.cleaned_data
 
 			import numpy as np
-			from plots import calcs
+			from tools import calcs
 			
 			# LV seperation altitude
 			alt_initial = data['initial_altitude']
@@ -417,7 +417,7 @@ def ep_prop_dutycycle(request):
 		if form.is_valid():
 			data = form.cleaned_data
 
-			from plots import calcs
+			from tools import calcs
 			import numpy as np
 			import itertools
 
